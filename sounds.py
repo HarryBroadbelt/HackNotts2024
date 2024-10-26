@@ -5,10 +5,10 @@ from enum import Enum
 
 class Direction(Enum):
     """Relative to north"""
-    LEFT = 1
-    RIGHT = 2
-    FORWARD = 3
-    BACKWARD = 4
+    LEFT = "L"
+    RIGHT = "R"
+    FORWARD = "U"
+    BACKWARD = "D"
 
 def distFinder(soundLoc: (int,int), playerLoc: (int,int)) -> int:
     dist = maths.sqrt((soundLoc[0]-playerLoc[0])**2 + (soundLoc[1]-playerLoc[1])**2)

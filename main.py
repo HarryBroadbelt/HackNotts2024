@@ -165,7 +165,8 @@ class Player:
 
     def __init__(self, loc = [1, 1]):
         self.loc = loc
-        self.dir = random.choice(["U", "D", "L", "R"])
+        #self.dir = random.choice(["U", "D", "L", "R"])
+        self.dir = "U"
         self.new_floor = False
 
     def turn_left(self):
@@ -459,7 +460,7 @@ def main():
                     if dis_type == "FAKE":
                         temp_display(player, cur_floor, enemy)
                     elif dis_type == "REAL":
-                        real_display(player, cur_floor, enemy)
+                        real_display(player, cur_floor, enemy, floors_cleared)
          
                 window_resize()
 
@@ -522,19 +523,20 @@ def main():
                 # player mov
 
                 if mov_dir != None and mov_timer == 0:
-                    mov_timer = int(FRAMERATE / 4)
+                    mov_timer = int(FRAMERATE / 6)
                     player.move(mov_dir, cur_floor.grid, cur_floor.exit)
                     new_display = True
 
                 if player.new_floor == True:
                     player.new_floor = False
                     new_floor = True
+                    floors_cleared += 1
 
                 else:
 
                     # enemy mov
 
-                    if en_mov_timer == 0 and False:
+                    if en_mov_timer == 0:
 
                         en_mov_timer = FRAMERATE
 
@@ -600,7 +602,7 @@ def temp_display(player, cur_floor, enemy):
     if player.dir == "R":
         pygame.draw.rect(game_window, (0, 0, 0), (player.loc[0] * 40 + 10 + 10, player.loc[1]*40 + 10 + 5, 20, 10))
 
-def real_display(player, cur_floor, enemy):
+def real_display(player, cur_floor, enemy, floor_num = 0):
     #print(random.randint(0, 100))
     pygame.draw.rect(game_window, (154, 154, 154), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT // 2))
     pygame.draw.rect(game_window, (158, 159, 125), (0, WINDOW_HEIGHT // 2, WINDOW_WIDTH, WINDOW_HEIGHT // 2))
@@ -831,7 +833,7 @@ def real_display(player, cur_floor, enemy):
             if enemy.x == n_loc[0] and enemy.y == n_loc[1]:
                 the_art = enemy.art
                 the_art = pygame.transform.scale(the_art, (320, 320))
-                game_window.blit(the_art, (WINDOW_WIDTH // 2 + 160, WINDOW_HEIGHT // 2 - 160))
+                game_window.blit(the_art, (WINDOW_WIDTH // 2 + 80, WINDOW_HEIGHT // 2 - 160))
     except:
         pass
 
@@ -890,7 +892,7 @@ def real_display(player, cur_floor, enemy):
             if enemy.x == n_loc[0] and enemy.y == n_loc[1]:
                 the_art = enemy.art
                 the_art = pygame.transform.scale(the_art, (320, 320))
-                game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160 - 320, WINDOW_HEIGHT // 2 - 160))
+                game_window.blit(the_art, (WINDOW_WIDTH // 2 - 80 - 320, WINDOW_HEIGHT // 2 - 160))
     except:
         pass
 
@@ -1064,7 +1066,11 @@ def real_display(player, cur_floor, enemy):
         game_window.blit(surfaces[1], (WINDOW_WIDTH // 6, WINDOW_HEIGHT // 6))
         game_window.blit(surfaces[0], (WINDOW_WIDTH // 3, WINDOW_HEIGHT // 3))
 
-        draw_trans_rect(game_window, (0,0,0), (160), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT))
+        brightness = 128 + floor_num * 16
+        if brightness > 224:
+            brightness = 224
+
+        draw_trans_rect(game_window, (0,0,0), (brightness), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT))
 
 def random_wall():
     return random.choice(["TF1", "TF2", "TF3", "TF4"])
@@ -1089,7 +1095,7 @@ console_log = []
 console_data = {"Message": "",
                 "Typing": False,
                 "Command": "",
-                "Last Command": "vision",
+                "Last Command": "",
                 "FPS": False}
     
 PLAT_VER = "WIN"
@@ -1112,5 +1118,7 @@ en_types = ["Meaty Michael", "Chaser", "Phased"]
 en_art = {"Meaty Michael": pygame.image.load("En1.png"),
           "Chaser": pygame.image.load("En2.png"),
           "Phased": pygame.image.load("En3.png")}
+
+en_sounds = {"Meaty Michael": "Move": pass}
             
 main()
