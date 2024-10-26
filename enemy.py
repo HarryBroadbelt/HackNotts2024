@@ -1,33 +1,30 @@
 class Enemy():
     def __init__(self, velocity, x, y, aggression):
         print('shimmy yeah shimmy yeah shimmy yah')
-        self.__velocity = velocity
-        self.__x = x
-        self.__y = y
-        self.__aggression = aggression
+        self.velocity = velocity
+        self.x = x
+        self.y = y
+        self.aggression = aggression
+        self.noticed = False
 
 
-    def set_velocity(self, velocity):
-        self.__velocity = velocity
+   
+
+    def noticed_player(self, grid, player_location, player_direction):
+        wall_present = False
+        if(self.x == player_location[0]): #if enemy and player on same row
+            if(self.x - player_location[0] < 0): #monster is to the left of the player
+                for i in range(self.x - player_location[0]):
+                    if(grid[i][self.y] == '#'):
+                        wall_present = True
+
+
+
+
+        self.noticed = True
+        return self.noticed
+
+        
+
     
-    def get_velocity(self):
-        return self.__velocity
-    
-    def set_x(self, x):
-        self.__x = x
-    
-    def get_x(self):
-        return self.__x
-    
-    def set_y(self, y):
-        self.__y = y
-    
-    def get_y(self):
-        return self.__y
-    
-    def set_aggression(self, aggression):
-        self.__aggression = aggression
-    
-    def get_aggression(self):
-        return self.__aggression
     
