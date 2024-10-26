@@ -69,6 +69,7 @@ class Enemy():
         return [self.x,self.y]
 
     def ai_process(self, grid, player_location):
+        enemy_position = [self.x, self.y]
         if(self.noticed):
             enemy_position=self.move_towards_player(grid,1,player_location)
 
