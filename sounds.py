@@ -15,10 +15,10 @@ def distFinder(soundLoc: (int,int), playerLoc: (int,int)) -> int:
 
 def soundVolume(distance: int, primaryDir: direction) -> (int,int):
     """Use this with "set_volume()"."""
-    if primaryDir == 1:
+    if primaryDir.value == 1:
         voL = 2/distance
         voR = 1/distance
-    elif primaryDir == 2:
+    elif primaryDir.value == 2:
         voL = 1/distance
         voR = 2/distance
     else:
