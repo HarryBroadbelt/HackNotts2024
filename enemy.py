@@ -32,19 +32,26 @@ class Enemy():
                         wall_present=True
         elif(self.x== player_location[0]): #if enemy and player are on same column
             same_row = True
-            if(self.y-player_location[1]<0): #enemy is below the player
-                for i in range(self.y, player_location[1], 1): #check to see if a wall exists between the enemy and player
+            print('1')
+            if(self.y-player_location[1]>0): #enemy is below the player
+                print('2')
+                for i in range(player_location[1], self.y, 1): #check to see if a wall exists between the enemy and player
                     if(grid[self.x][i]=='#'):
+                        print('3')
                         wall_present=True
             else:
-                for i in range(self.y, player_location[1],-1): #check to see if a wall exists between the enemy and player
+                print('4')
+                for i in range(player_location[1], self.y,-1): #check to see if a wall exists between the enemy and player
+                    print('a ' + str(i))
                     if(grid[self.x][i]=='#'):
+                        print('5')
                         wall_present=True
 
         if(wall_present or same_row == False):
             return False
         
         self.noticed=True
+        print
         if(self.type=='Chaser'):
             self.current_aggro=self.current_aggro+3
             if(self.current_aggro>self.attributes['max_aggro']):
@@ -56,7 +63,7 @@ class Enemy():
             self.x=self.x+distance
         elif(self.x-player_location[0]>0 and self.y==player_location[1]):
             self.x=self.x-distance
-        elif(self.y-player_location[1]<0 and self.x==player_location[0]):
+        elif(self.y-player_location[1]>0 and self.x==player_location[0]):
             self.y=self.y-distance
         elif(self.y-player_location[1]<0 and self.x==player_location[0]):
             self.y=self.y+distance
