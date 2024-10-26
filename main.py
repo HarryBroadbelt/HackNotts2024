@@ -1,5 +1,6 @@
 #1234567890123456789012345678901234567890123456789012345678901234567890123456789
 import random, copy, pygame, sys, os, math, time, asyncio
+from enemy import Enemy
 
 ### TEMPLATE FUNCTIONS
 
@@ -164,12 +165,80 @@ class Player:
     def __init__(self, loc = [1, 1]):
         self.loc = loc
         self.dir = random.choice(["U", "D", "L", "R"])
+        self.new_floor = False
+
+    def turn_left(self):
+        if self.dir == "U":
+            self.dir = "L"
+        elif self.dir == "D":
+            self.dir = "R"
+        elif self.dir == "L":
+            self.dir = "D"
+        elif self.dir == "R":
+            self.dir = "U"
+
+    def turn_right(self):
+        if self.dir == "U":
+            self.dir = "R"
+        elif self.dir == "D":
+            self.dir = "L"
+        elif self.dir == "L":
+            self.dir = "U"
+        elif self.dir == "R":
+            self.dir = "D"
+
+    def move(self, mov_dir, grid, flexit):
+        cur_loc = copy.deepcopy(self.loc)
+        if mov_dir == "w":
+            if self.dir == "U":
+                self.loc[1] -= 1
+            elif self.dir == "D":
+                self.loc[1] += 1
+            elif self.dir == "L":
+                self.loc[0] -= 1
+            elif self.dir == "R":
+                self.loc[0] += 1
+        if mov_dir == "s":
+            if self.dir == "U":
+                self.loc[1] += 1
+            elif self.dir == "D":
+                self.loc[1] -= 1
+            elif self.dir == "L":
+                self.loc[0] += 1
+            elif self.dir == "R":
+                self.loc[0] -= 1
+        if mov_dir == "a":
+            if self.dir == "U":
+                self.loc[0] -= 1
+            elif self.dir == "D":
+                self.loc[0] += 1
+            elif self.dir == "L":
+                self.loc[1] -= 1
+            elif self.dir == "R":
+                self.loc[1] += 1
+        if mov_dir == "d":
+            if self.dir == "U":
+                self.loc[0] += 1
+            elif self.dir == "D":
+                self.loc[0] -= 1
+            elif self.dir == "L":
+                self.loc[1] += 1
+            elif self.dir == "R":
+                self.loc[1] -= 1
+
+        if flexit == self.loc:
+            self.new_floor = True
+                
+        if grid[self.loc[0]][self.loc[1]] == "#":
+            self.loc = copy.deepcopy(cur_loc)
 
 class Floor:
 
     def __init__(self):
 
         LV_GEN = "set"
+
+        self.exit = [1, 0]
 
         if LV_GEN == "set":
 
@@ -182,7 +251,7 @@ class Floor:
                          ["#","#"," ","#","#"," ","#","#"," ","#","#"],
                          ["#"," "," ","#","#"," ","#","#"," "," ","#"],
                          ["#"," ","#"," "," "," "," "," ","#"," ","#"],
-                         ["#"," "," "," ","#","#","#"," "," "," ","#"],
+                         ["#"," "," "," ","#"," ","#"," "," "," ","#"],
                          ["#","#","#","#","#","#","#","#","#","#","#"]]
 
         if LV_GEN == "rand":
@@ -252,6 +321,13 @@ def main():
 
             game_window.fill((255, 255, 255))
             
+            font = pygame.font.Font(resource_path('Kenney Pixel.ttf'), 150)
+
+            text = font.render("SILENT RIFT", True, (0, 0, 0))
+            game_window.blit(text, (WINDOW_WIDTH // 2- text.get_width() // 2, 20))
+
+            pygame.draw.rect(game_window, (0, 0, 0), (WINDOW_WIDTH // 2 - text.get_width() // 2 - 5, 20 + text.get_height(), text.get_width() + 10, 20))
+            
             font = pygame.font.Font(resource_path('Kenney Pixel.ttf'), 120)
 
             for i in range(len(options)):
@@ -307,11 +383,20 @@ def main():
                 if sel > len(options) - 1:
                     sel = 0 
 
-        while game_state == "TUTORIAL": # the actual gameplay
+        while game_state == "TUTORIAL": # tutorial
 
             clock.tick(FRAMERATE)
 
             game_window.fill((255, 255, 255))
+            
+            font = pygame.font.Font(resource_path('Kenney Pixel.ttf'), 120)
+
+            text = font.render("TUTORIAL", True, (0, 0, 0))
+            game_window.blit(text, (WINDOW_WIDTH // 2- text.get_width() // 2, 20))
+
+            pygame.draw.rect(game_window, (0, 0, 0), (WINDOW_WIDTH // 2 - text.get_width() // 2 - 5, 20 + text.get_height(), text.get_width() + 10, 20))
+
+            game_window.blit(qr_code, (WINDOW_WIDTH // 2 - qr_code.get_width() // 2, 60 + text.get_height()))
      
             window_resize()
 
@@ -331,21 +416,34 @@ def main():
             game_over = False
 
             floors_cleared = 0
-            new_floor = True            
+            new_floor = True
+
+            mov_dir = None
+            mov_timer = 0
 
             while game_over == False:
 
                 clock.tick(FRAMERATE)
+
+                if mov_timer > 0:
+                    mov_timer -= 1
 
                 ## NEW FRAME
 
                 if new_floor == True:
                     new_floor = False
                     cur_floor = Floor()
+                    loc = [1, 1]
+                    player = Player(loc)
+                    enemy = Enemy(velocity = 0, x = 9, y = 9, type = "Chaser")
+
+                    print(player.loc)
 
                 ## DISPLAY
 
                 game_window.fill((255, 255, 255))
+
+                temp_display(player, cur_floor, enemy)
          
                 window_resize()
 
@@ -360,6 +458,93 @@ def main():
                             game_state = "MAIN MENU"
                             log(("new game state: " + game_state))
 
+                        if event.key == pygame.K_w:
+                            mov_dir = "w"
+                        if event.key == pygame.K_a:
+                            mov_dir = "a"
+                        if event.key == pygame.K_s:
+                            mov_dir = "s"
+                        if event.key == pygame.K_d:
+                            mov_dir = "d"
+                        if event.key == pygame.K_e:
+                            player.turn_right()
+                        if event.key == pygame.K_q:
+                            player.turn_left()
+
+                    if event.type == pygame.KEYUP:
+                        if event.key == pygame.K_w and mov_dir == "w":
+                            mov_dir = None
+                        if event.key == pygame.K_a and mov_dir == "a":
+                            mov_dir = None
+                        if event.key == pygame.K_s and mov_dir == "s":
+                            mov_dir = None
+                        if event.key == pygame.K_d and mov_dir == "d":
+                            mov_dir = None
+
+                ## ACTIONS
+
+                # player mov
+
+                if mov_dir != None and mov_timer == 0:
+                    mov_timer = FRAMERATE / 4
+                    player.move(mov_dir, cur_floor.grid, cur_floor.exit)
+
+                if player.new_floor == True:
+                    player.new_floor = False
+                    new_floor = True
+
+                else:
+
+                    # enemy mov
+
+                    enemy.noticed_player(cur_floor.grid, player.loc, player.dir)
+                    en_loc = enemy.ai_process(cur_floor.grid, player.loc)
+                    enemy.x = en_loc[0]
+                    enemy.y = en_loc[1]
+
+                    if enemy.x == player.loc[0] and enemy.y == player.loc[1]: # player caught
+                        game_over = True
+
+            game_state = "GAME OVER"
+
+        while game_state == "GAME OVER":
+
+            clock.tick(FRAMERATE)
+
+            game_window.fill((255, 255, 255))
+            
+            font = pygame.font.Font(resource_path('Kenney Pixel.ttf'), 120)
+
+            text = font.render("GAME OVER", True, (0, 0, 0))
+            game_window.blit(text, (WINDOW_WIDTH // 2- text.get_width() // 2, 20))
+
+            pygame.draw.rect(game_window, (0, 0, 0), (WINDOW_WIDTH // 2 - text.get_width() // 2 - 5, 20 + text.get_height(), text.get_width() + 10, 20))
+     
+            window_resize()
+
+            events = global_inputs()
+            
+            for event in events:
+                if event.type == pygame.KEYDOWN:
+                                    
+                    if event.key == pygame.K_SPACE or event.key == pygame.K_RETURN:
+                        game_state = "MAIN MENU"
+                        log(("new game state: " + game_state))
+
+def temp_display(player, cur_floor, enemy):
+    for x in range(0, len(cur_floor.grid)):
+        for y in range(0, len(cur_floor.grid)):
+            if cur_floor.grid[x][y] == "#":
+                pygame.draw.rect(game_window, (0, 0, 0), (x*40, y*40, 40, 40))
+            elif cur_floor.grid[x][y] == " ":
+                pygame.draw.rect(game_window, (255, 255, 255), (x*40, y*40, 40, 40))
+
+    pygame.draw.rect(game_window, (255, 255, 255), (cur_floor.exit[0]*40 + 10, cur_floor.exit[1]*40 + 10, 20, 20))
+
+    pygame.draw.rect(game_window, (0, 255, 0), (player.loc[0]*40 + 10, player.loc[1]*40 + 10, 20, 20))
+    
+    pygame.draw.rect(game_window, (255, 0, 0), (enemy.x*40 + 10, enemy.y*40 + 10, 20, 20))
+                
 # Create width and height constants
 WINDOW_WIDTH = 960
 WINDOW_HEIGHT = 720
@@ -389,5 +574,7 @@ FRAMERATE = 60
 
 if DEV_VER == "DEV":
     console_data["FPS"] = True
+    
+qr_code = pygame.image.load(resource_path("QR.png"))
             
 main()
