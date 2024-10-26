@@ -1,3 +1,5 @@
+import random
+
 class Enemy():
     def __init__(self, velocity, x, y, type):
         ('shimmy yeah shimmy yeah shimmy yah')
@@ -65,6 +67,28 @@ class Enemy():
         enemy_position = [self.x, self.y]
         if(self.noticed):
             enemy_position=self.move_towards_player(grid,1,player_location)
+        else:
+            rng = random.randint(1,4):
+            while(1):
+                if(rng == 1 and grid[self.x+1,self.y] != '#'):
+                    self.x = self.x + 1
+                    self.y = self.y
+                    break
+                elif(rng == 2 and grid[self.x-1,self.y] != '#'):
+                    self.x = self.x - 1
+                    self.y = self.y
+                    break
+                elif(rng == 3 and grid[self.x,self.y+1] != '#'):
+                    self.x = self.x
+                    self.y = self.y + 1
+                    break
+                elif(rng == 4 and grid[self.x+1,self.y-1] != '#'):
+                    self.x = self.x
+                    self.y = self.y - 1
+                    break
+                continue
+            enemy_position = [self.x, self.y]
+            
 
         return enemy_position
 
