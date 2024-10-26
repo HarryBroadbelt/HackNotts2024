@@ -1,6 +1,7 @@
 #1234567890123456789012345678901234567890123456789012345678901234567890123456789
 import random, copy, pygame, sys, os, math, time, asyncio
 from enemy import Enemy
+from imageBlur import blurScreen
 
 ### TEMPLATE FUNCTIONS
 
@@ -437,6 +438,8 @@ def main():
                 ## NEW FRAME
 
                 if new_floor == True:
+                    
+                    new_display = True
                     new_floor = False
                     cur_floor = Floor()
                     loc = [1, 1]
@@ -447,12 +450,15 @@ def main():
 
                 ## DISPLAY
 
-                game_window.fill((255, 255, 255))
+                if new_display == True:
+                    new_display = False
 
-                if dis_type == "FAKE":
-                    temp_display(player, cur_floor, enemy)
-                elif dis_type == "REAL":
-                    real_display(player, cur_floor, enemy)
+                    game_window.fill((255, 255, 255))
+
+                    if dis_type == "FAKE":
+                        temp_display(player, cur_floor, enemy)
+                    elif dis_type == "REAL":
+                        real_display(player, cur_floor, enemy)
          
                 window_resize()
 
@@ -505,6 +511,7 @@ def main():
                 if mov_dir != None and mov_timer == 0:
                     mov_timer = FRAMERATE / 4
                     player.move(mov_dir, cur_floor.grid, cur_floor.exit)
+                    new_display = True
 
                 if player.new_floor == True:
                     player.new_floor = False
@@ -515,6 +522,8 @@ def main():
                     # enemy mov
 
                     if en_mov_timer == 0:
+                        
+                        new_display = True
 
                         en_mov_timer = 30
 
@@ -567,9 +576,18 @@ def temp_display(player, cur_floor, enemy):
     pygame.draw.rect(game_window, (255, 0, 0), (enemy.x*40 + 10, enemy.y*40 + 10, 20, 20))
 
 def real_display(player, cur_floor, enemy):
-    print(random.randint(0, 100))
+    #print(random.randint(0, 100))
     pygame.draw.rect(game_window, (154, 154, 154), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT // 2))
     pygame.draw.rect(game_window, (158, 159, 125), (0, WINDOW_HEIGHT // 2, WINDOW_WIDTH, WINDOW_HEIGHT // 2))
+
+    game_window.blit(test_img, (0, 0))
+
+    surfaces = blurScreen(game_window)
+
+    game_window.blit(surfaces[3], (0, 0))
+    game_window.blit(surfaces[2], (WINDOW_WIDTH // 12, WINDOW_HEIGHT // 12))
+    game_window.blit(surfaces[1], (WINDOW_WIDTH // 6, WINDOW_HEIGHT // 6))
+    game_window.blit(surfaces[0], (WINDOW_WIDTH // 3, WINDOW_HEIGHT // 3))
                 
 # Create width and height constants
 WINDOW_WIDTH = 960
@@ -602,5 +620,6 @@ if DEV_VER == "DEV":
     console_data["FPS"] = True
     
 qr_code = pygame.image.load(resource_path("QR.png"))
+test_img = pygame.image.load(resource_path("test.png"))
             
 main()
