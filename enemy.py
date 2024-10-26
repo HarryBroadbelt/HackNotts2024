@@ -11,7 +11,8 @@ ENEMY TYPES:
 
 
 class Enemy():
-    def __init__(self, velocity, x, y, type):
+    def __init__(self, velocity, x, y, type, art):
+        self.art = art
         print('shimmy yeah shimmy yeah shimmy yah')
         #type = 'Stalker'
         if(type == 'Chaser'):
