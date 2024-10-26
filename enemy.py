@@ -1,6 +1,6 @@
 class Enemy():
     def __init__(self, velocity, x, y, type):
-        print('shimmy yeah shimmy yeah shimmy yah')
+        ('shimmy yeah shimmy yeah shimmy yah')
         if(type == 'Chaser'):
             max_aggro = 10
         if(type == 'Stalker'):
@@ -18,30 +18,23 @@ class Enemy():
         self.noticed = False
         same_row = False
         wall_present=False
-        print('1')
         if(self.y == player_location[1]): #if enemy and player on same row
             same_row = True
-            print('2')
             if(self.x - player_location[0]<0): #enemy is to the left of the player
-                print('3')
                 for i in range(self.x, player_location[0],1): #check to see if a wall exists between the enemy and player
                     if(grid[i][self.y]=='#'):
                         wall_present=True
             else:
-                print('4')
                 for i in range(self.x, player_location[0],-1): #check to see if a wall exists between the enemy and player
                     if(grid[i][self.y]=='#'):
                         wall_present=True
         elif(self.x== player_location[0]): #if enemy and player are on same column
             same_row = True
-            print('5')
             if(self.y-player_location[1]<0): #enemy is below the player
-                print('6')
                 for i in range(self.y, player_location[1], 1): #check to see if a wall exists between the enemy and player
                     if(grid[self.x][i]=='#'):
                         wall_present=True
             else:
-                print('7')
                 for i in range(self.y, player_location[1],-1): #check to see if a wall exists between the enemy and player
                     if(grid[self.x][i]=='#'):
                         wall_present=True
