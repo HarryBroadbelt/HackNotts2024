@@ -68,7 +68,7 @@ class Enemy():
         if(self.noticed):
             enemy_position=self.move_towards_player(grid,1,player_location)
         else:
-            rng = random.randint(1,4):
+            rng = random.randint(1,4)
             while(1):
                 if(rng == 1 and grid[self.x+1,self.y] != '#'):
                     self.x = self.x + 1
