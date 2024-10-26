@@ -206,7 +206,10 @@ class Floor:
                 aStarPassed = aStarAlgo(self.playerSpawn,self.exit,self) and aStarAlgo(self.monsterSpawn,self.exit,self)
                         
                             
-        for i in range(len(self.grid)):
-            print(self.grid[i])
+        
         #print(self.grid)
-floor = Floor()
+if __name__ == "__main__":
+    floor = Floor()
+    for i in range(30):
+        print(floor.grid[i])
+
