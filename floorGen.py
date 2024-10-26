@@ -1,5 +1,61 @@
 import random
 import math as maths
+import heapq
+
+class Node:
+    def __init__(self):
+        self.f = float("inf")
+        self.q = float("inf")
+        self.h = 0
+        self.parent = (0,0)
+
+def isDest(row,col,floor):
+    return row == floor.exit[0] and col == floor.exit[1]
+
+def calcHeuristic(row, col, floor):
+    return((row-floor.exit[0])**2+(col-floor.exit)**2)
+
+def isValid(row,col):
+    return (row>=0) and (row<30) and (col>=0) and (col<30)
+
+def unblocked(grid,row,col):
+    grid[row][col] == " "
+
+def aStarAlgo(start,end,floor):
+    closedList = [[False for _ in range(30)] for _ in range(30)]
+    nodeDetails = [[Node() for _ in range(30)] for _ in range(30)]
+    nodeDetails[start[0]][start[1]].f = 0
+    nodeDetails[start[0]][start[1]].g = 0
+    nodeDetails[start[0]][start[1]].h = 0
+    nodeDetails[start[0]][start[1]].parent = start
+    openList = []
+    heapq.heappush(openList, ((0.0), start[0], start[1]))
+    foundDest = False
+    while len(openList) > 0:
+        p = heapq.heappop(openList)
+        i = p[1]
+        j = p[2]
+        closedList[i][j] = True
+        directions = [(0,1),(0,-1),(1,0),(-1,0),(1,1),(1,-1),(-1,-1)]
+        for dir in directions:
+            newI = i + dir[0]
+            newJ = j+dir[1]
+            if isValid(newI,newJ) and unblocked(floor.grid,newI,newJ) and not closedList[newI][newJ]:
+                if isDest(newI, newJ, floor):
+                    nodeDetails[newI][newJ].parent=(i,j)
+                    foundDest=True #found path
+                    return True
+                else:
+                    gNew = nodeDetails[i][j].g+1.0
+                    hNew=calcHeuristic(newI,newJ,floor)
+                    fNew=gNew+hNew
+                    if nodeDetails[newI][newJ].f==float("inf") or nodeDetails[newI][newJ].f>fNew:
+                        heapq.heappush(openList,(fNew,newI,newJ))
+                        nodeDetails[newI][newJ].f=fNew
+                        nodeDetails[newI][newJ].g=gNew
+                        nodeDetails[newI][newJ].h=hNew
+                        nodeDetails[newI][newJ].parent=(i,j)
+    
 class Floor:
 
     def __init__(self):
@@ -7,15 +63,19 @@ class Floor:
         LV_GEN = "rand"
 
         self.exit = [1, 0]
+        self.playerSpawn = [0,1]
+        self.monsterSpawn = [0,0]
         exitFound = False
         playerPlaced = False
+        monsterPlaced = False
+        aStarPassed = False
         
         if LV_GEN == "rand":
             
             MAX_SIZE = 30
             MAX_TUNNELS = 50
             MAX_LENGTH = 15
-            while not exitFound and not playerPlaced:
+            while not exitFound and not playerPlaced and not monsterPlaced and not aStarPassed:
                 exitFound = False
                 playerPlaced = False
                 self.grid = []
@@ -75,10 +135,10 @@ class Floor:
                             try:
                                 if self.grid[i][u+1] == " " or self.grid[i][u-1] == " ":
                                     if self.grid[i+2][u] == " ":
-                                        if random.randint(0,100) > 25 and self.grid[i+1][u+1] == "#" and self.grid[i+1][u-1] == "#":
+                                        if self.grid[i+1][u+1] == "#" and self.grid[i+1][u-1] == "#":
                                             self.grid[i+1][u] = " "
                                     elif self.grid[i-2][u] == " ":
-                                        if random.randint(0,100) > 25 and self.grid[i-1][u+1] == "#" and self.grid[i-1][u-1] == "#":
+                                        if self.grid[i-1][u+1] == "#" and self.grid[i-1][u-1] == "#":
                                             self.grid[i-1][u] = " "
                             except IndexError:
                                 pass
@@ -94,7 +154,7 @@ class Floor:
                                 pass
                         if exitFound and self.grid[i][u] == " " and not playerPlaced:
                             if maths.sqrt((i-self.exit[0])**2+(u-self.exit[1])**2) >= 12:
-                                self.grid[i][u] = "p"
+                                self.playerSpawn = (i,u)
                                 playerPlaced = True
 
                     
@@ -134,8 +194,17 @@ class Floor:
                                 pass
                         if exitFound and self.grid[i][u] == " " and not playerPlaced:
                             if maths.sqrt((i-self.exit[0])**2+(u-self.exit[1])**2) >= 12:
-                                self.grid[i][u] = "p"
+                                self.playerSpawn = (i,u)
                                 playerPlaced = True
+                crazyList = []
+                for i in range(1,MAX_SIZE):
+                    for u in range(1,MAX_SIZE):
+                        if self.grid[i][u] == " " and (i,u) != self.exit and (i,u) != self.playerSpawn and maths.sqrt((i-self.playerSpawn[0])**2+(u-self.playerSpawn[1])**2) >= 12:
+                            crazyList.append((i,u))
+                self.monsterSpawn = random.choice(crazyList)
+                monsterSpawned = True
+                aStarPassed = aStarAlgo(self.playerSpawn,self.exit,self) and aStarAlgo(self.monsterSpawn,self.exit,self)
+                        
                             
         for i in range(len(self.grid)):
             print(self.grid[i])
