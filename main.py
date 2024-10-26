@@ -208,7 +208,7 @@ class Player:
                 self.loc[0] += 1
             elif self.dir == "R":
                 self.loc[0] -= 1
-        if mov_dir == "a":
+        if mov_dir == "d":
             if self.dir == "U":
                 self.loc[0] -= 1
             elif self.dir == "D":
@@ -217,7 +217,7 @@ class Player:
                 self.loc[1] -= 1
             elif self.dir == "R":
                 self.loc[1] += 1
-        if mov_dir == "d":
+        if mov_dir == "a":
             if self.dir == "U":
                 self.loc[0] += 1
             elif self.dir == "D":
@@ -483,8 +483,10 @@ def main():
                             mov_dir = "d"
                         if event.key == pygame.K_e:
                             player.turn_right()
+                            new_display = True
                         if event.key == pygame.K_q:
                             player.turn_left()
+                            new_display = True
 
                     if event.type == pygame.KEYUP:
                         if event.key == pygame.K_w and mov_dir == "w":
@@ -580,7 +582,81 @@ def real_display(player, cur_floor, enemy):
     pygame.draw.rect(game_window, (154, 154, 154), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT // 2))
     pygame.draw.rect(game_window, (158, 159, 125), (0, WINDOW_HEIGHT // 2, WINDOW_WIDTH, WINDOW_HEIGHT // 2))
 
-    game_window.blit(test_img, (0, 0))
+    #game_window.blit(test_img, (0, 0))
+
+    base_change = [0, 0]
+
+    if player.dir == "U":
+        base_change = [0, -1]
+        l_change = [-1, 0]
+        r_change = [1, 0]
+    if player.dir == "D":
+        base_change = [0, 1]
+        l_change = [1, 0]
+        r_change = [-1, 0]
+    if player.dir == "L":
+        base_change = [-1, 0]
+        l_change = [0, 1]
+        r_change = [0, -1]
+    if player.dir == "R":
+        base_change = [1, 0]
+        l_change = [0, -1]
+        r_change = [0, 1]
+
+    # the fuckin first person
+
+    # 5-dist tiles:
+
+    # 4-dist tiles:
+
+    # 3-dist tiles:
+
+    # 2-dist tiles:
+
+    # 1-dist tiles:
+
+    n_loc = [player.loc[0] + base_change[0], player.loc[1] + base_change[1]]
+
+    try:
+        if cur_floor.grid[n_loc[0]][n_loc[1]] == "#":
+            if cur_floor.exit == n_loc:
+                the_art = arts["TFD"].copy()
+            else:
+                the_art = arts[random_wall()].copy()
+            the_art = pygame.transform.scale(the_art, (640, 640))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 320, WINDOW_HEIGHT // 2 - 320))
+    except:
+        pass
+
+    # 0-dist tiles:
+
+    n_loc = [player.loc[0] + l_change[0], player.loc[1] + l_change[1]]
+
+    try:
+        if cur_floor.grid[n_loc[0]][n_loc[1]] == "#":
+            if cur_floor.exit == n_loc:
+                the_art = arts["TLD"].copy()
+            else:
+                the_art = arts["TL1"].copy()
+            the_art = pygame.transform.scale(the_art, (640*2, 640*2))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 640, WINDOW_HEIGHT // 2 - 640))
+    except:
+        pass      
+
+    n_loc = [player.loc[0] + r_change[0], player.loc[1] + r_change[1]]
+
+    try:
+        if cur_floor.grid[n_loc[0]][n_loc[1]] == "#":
+            if cur_floor.exit == n_loc:
+                the_art = arts["TRD"].copy()
+            else:
+                the_art = arts["TR1"].copy()
+            the_art = pygame.transform.scale(the_art, (640*2, 640*2))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 640, WINDOW_HEIGHT // 2 - 640))
+    except:
+        pass      
+
+    # blur
 
     surfaces = blurScreen(game_window)
 
@@ -588,6 +664,11 @@ def real_display(player, cur_floor, enemy):
     game_window.blit(surfaces[2], (WINDOW_WIDTH // 12, WINDOW_HEIGHT // 12))
     game_window.blit(surfaces[1], (WINDOW_WIDTH // 6, WINDOW_HEIGHT // 6))
     game_window.blit(surfaces[0], (WINDOW_WIDTH // 3, WINDOW_HEIGHT // 3))
+
+    #draw_trans_rect(game_window, (0, 0, 0), (192), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT))
+
+def random_wall():
+    return random.choice(["TF1", "TF2", "TF3", "TF4"])
                 
 # Create width and height constants
 WINDOW_WIDTH = 960
@@ -621,5 +702,10 @@ if DEV_VER == "DEV":
     
 qr_code = pygame.image.load(resource_path("QR.png"))
 test_img = pygame.image.load(resource_path("test.png"))
+
+art_list = ["TF1","TF2","TF3","TF4","TFD","TL1","TLD","TR1","TRD","TC1","TD1"]
+arts = {}
+for art in art_list:
+    arts[art] = pygame.image.load((art + ".png"))
             
 main()
