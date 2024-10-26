@@ -244,15 +244,15 @@ class Floor:
         if LV_GEN == "set":
 
             self.grid = [["#","#","#","#","#","#","#","#","#","#","#"],
-                         ["#"," "," "," "," ","#","#"," "," "," ","#"],
+                         ["#"," "," "," "," "," ","#"," "," "," ","#"],
                          ["#"," ","#"," ","#"," "," "," ","#"," ","#"],
                          ["#"," "," "," ","#"," ","#","#"," "," ","#"],
                          ["#","#"," ","#","#"," ","#","#"," ","#","#"],
                          ["#","#"," "," "," "," "," "," "," ","#","#"],
                          ["#","#"," ","#","#"," ","#","#"," ","#","#"],
                          ["#"," "," ","#","#"," ","#","#"," "," ","#"],
-                         ["#"," ","#"," "," "," "," "," ","#","#","#"],
-                         ["#"," "," "," ","#"," ","#"," ","#"," ","#"],
+                         ["#"," ","#"," "," "," "," "," ","#"," ","#"],
+                         ["#"," "," "," ","#"," ","#"," "," "," ","#"],
                          ["#","#","#","#","#","#","#","#","#","#","#"]]
 
         if LV_GEN == "rand":
@@ -444,7 +444,8 @@ def main():
                     cur_floor = Floor()
                     loc = [1, 1]
                     player = Player(loc)
-                    enemy = Enemy(velocity = 0, x = 9, y = 9, type = "Chaser")
+                    en_typ = random.choice(en_types)
+                    enemy = Enemy(velocity = 0, x = 9, y = 9, type = en_typ, art = en_art[en_typ])
 
                     print(player.loc)
 
@@ -499,6 +500,7 @@ def main():
                             mov_dir = None
 
                 if console_data["Command"] == "dis":
+                    new_display = True
                     console_data["Last Command"] = "dis"
                     console_data["Command"] = ""
                     if dis_type == "FAKE":
@@ -507,9 +509,11 @@ def main():
                         dis_type = "FAKE"
                         
                 if console_data["Command"] == "vision":
+                    new_display = True
                     console_data["Last Command"] = "vision"
                     console_data["Command"] = ""
                 if console_data["Command"] == "unvision":
+                    new_display = True
                     console_data["Last Command"] = "unvision"
                     console_data["Command"] = ""
 
@@ -531,15 +535,18 @@ def main():
                     # enemy mov
 
                     if en_mov_timer == 0:
-                        
-                        new_display = True
 
-                        en_mov_timer = 30
+                        en_mov_timer = FRAMERATE
 
                         enemy.noticed_player(cur_floor.grid, player.loc, player.dir)
+                        ox = enemy.x
+                        oy = enemy.y
                         en_loc = enemy.ai_process(cur_floor.grid, player.loc)
-                        enemy.x = en_loc[0]
-                        enemy.y = en_loc[1]
+                        if ox != en_loc[0] or oy != en_loc[1]:
+                            enemy.x = en_loc[0]
+                            enemy.y = en_loc[1]
+                            
+                            new_display = True
 
                     if enemy.x == player.loc[0] and enemy.y == player.loc[1]: # player caught
                         game_over = True
@@ -696,13 +703,6 @@ def real_display(player, cur_floor, enemy):
                 the_art = arts["TL1"].copy()
             the_art = pygame.transform.scale(the_art, (160, 160))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 - 80*2, WINDOW_HEIGHT // 2 - 80))
-        else:
-            the_art = arts["TD1"].copy()
-            the_art = pygame.transform.scale(the_art, (160, 160))
-            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160 - 80, WINDOW_HEIGHT // 2 - 80))
-            the_art = arts["TC1"].copy()
-            the_art = pygame.transform.scale(the_art, (160, 160))
-            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160 - 80, WINDOW_HEIGHT // 2 - 80))
     except:
         pass
 
@@ -1059,5 +1059,9 @@ art_list = ["TF1","TF2","TF3","TF4","TFD","TL1","TLD","TR1","TRD","TC1","TD1"]
 arts = {}
 for art in art_list:
     arts[art] = pygame.image.load((art + ".png"))
+
+en_types = ["Meaty Michael"]
+
+en_art = {"Meaty Michael": pygame.image.load("En1.png")}
             
 main()
