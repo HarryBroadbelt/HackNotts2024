@@ -14,20 +14,6 @@ class Enemy():
         self.type=type
 
 
-    # MOVEMENT FUNCTIONS
-    def move_x_left(self):
-        self.x=self.x-1
-
-    def move_x_right(self):
-        self.x=self.x+1
-    
-    def move_y_down(self):
-        self.y=self.y+1
-    
-    def move_y_up(self):
-        self.y=self.y-1
-    
-
     def noticed_player(self, grid, player_location, player_direction):
         wall_present=False
         if(self.x == player_location[0]): #if enemy and player on same row
@@ -73,7 +59,7 @@ class Enemy():
         if(self.noticed):
             enemy_position=self.move_towards_player(grid,1,player_location)
 
-        return
+        return enemy_position
 
 
         
