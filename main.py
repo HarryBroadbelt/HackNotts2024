@@ -421,12 +421,18 @@ def main():
             mov_dir = None
             mov_timer = 0
 
+            en_mov_timer = 0
+
+            dis_type = "REAL"
+
             while game_over == False:
 
                 clock.tick(FRAMERATE)
 
                 if mov_timer > 0:
                     mov_timer -= 1
+                if en_mov_timer > 0:
+                    en_mov_timer -= 1
 
                 ## NEW FRAME
 
@@ -443,7 +449,10 @@ def main():
 
                 game_window.fill((255, 255, 255))
 
-                temp_display(player, cur_floor, enemy)
+                if dis_type == "FAKE":
+                    temp_display(player, cur_floor, enemy)
+                elif dis_type == "REAL":
+                    real_display(player, cur_floor, enemy)
          
                 window_resize()
 
@@ -481,6 +490,14 @@ def main():
                         if event.key == pygame.K_d and mov_dir == "d":
                             mov_dir = None
 
+                if console_data["Command"] == "dis":
+                    console_data["Last Command"] = "dis"
+                    console_data["Command"] = ""
+                    if dis_type == "FAKE":
+                        dis_type = "REAL"
+                    else:
+                        dis_type = "FAKE"
+
                 ## ACTIONS
 
                 # player mov
@@ -497,10 +514,14 @@ def main():
 
                     # enemy mov
 
-                    enemy.noticed_player(cur_floor.grid, player.loc, player.dir)
-                    en_loc = enemy.ai_process(cur_floor.grid, player.loc)
-                    enemy.x = en_loc[0]
-                    enemy.y = en_loc[1]
+                    if en_mov_timer == 0:
+
+                        en_mov_timer = 30
+
+                        enemy.noticed_player(cur_floor.grid, player.loc, player.dir)
+                        en_loc = enemy.ai_process(cur_floor.grid, player.loc)
+                        enemy.x = en_loc[0]
+                        enemy.y = en_loc[1]
 
                     if enemy.x == player.loc[0] and enemy.y == player.loc[1]: # player caught
                         game_over = True
@@ -544,6 +565,11 @@ def temp_display(player, cur_floor, enemy):
     pygame.draw.rect(game_window, (0, 255, 0), (player.loc[0]*40 + 10, player.loc[1]*40 + 10, 20, 20))
     
     pygame.draw.rect(game_window, (255, 0, 0), (enemy.x*40 + 10, enemy.y*40 + 10, 20, 20))
+
+def real_display(player, cur_floor, enemy):
+    print(random.randint(0, 100))
+    pygame.draw.rect(game_window, (154, 154, 154), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT // 2))
+    pygame.draw.rect(game_window, (158, 159, 125), (0, WINDOW_HEIGHT // 2, WINDOW_WIDTH, WINDOW_HEIGHT // 2))
                 
 # Create width and height constants
 WINDOW_WIDTH = 960
