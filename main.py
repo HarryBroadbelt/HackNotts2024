@@ -244,15 +244,15 @@ class Floor:
         if LV_GEN == "set":
 
             self.grid = [["#","#","#","#","#","#","#","#","#","#","#"],
-                         ["#"," "," "," ","#","#","#"," "," "," ","#"],
-                         ["#"," ","#"," "," "," "," "," ","#"," ","#"],
-                         ["#"," "," ","#","#"," ","#","#"," "," ","#"],
+                         ["#"," "," "," "," ","#","#"," "," "," ","#"],
+                         ["#"," ","#"," ","#"," "," "," ","#"," ","#"],
+                         ["#"," "," "," ","#"," ","#","#"," "," ","#"],
                          ["#","#"," ","#","#"," ","#","#"," ","#","#"],
                          ["#","#"," "," "," "," "," "," "," ","#","#"],
                          ["#","#"," ","#","#"," ","#","#"," ","#","#"],
                          ["#"," "," ","#","#"," ","#","#"," "," ","#"],
-                         ["#"," ","#"," "," "," "," "," ","#"," ","#"],
-                         ["#"," "," "," ","#"," ","#"," "," "," ","#"],
+                         ["#"," ","#"," "," "," "," "," ","#","#","#"],
+                         ["#"," "," "," ","#"," ","#"," ","#"," ","#"],
                          ["#","#","#","#","#","#","#","#","#","#","#"]]
 
         if LV_GEN == "rand":
@@ -505,6 +505,13 @@ def main():
                         dis_type = "REAL"
                     else:
                         dis_type = "FAKE"
+                        
+                if console_data["Command"] == "vision":
+                    console_data["Last Command"] = "vision"
+                    console_data["Command"] = ""
+                if console_data["Command"] == "unvision":
+                    console_data["Last Command"] = "unvision"
+                    console_data["Command"] = ""
 
                 ## ACTIONS
 
@@ -615,13 +622,161 @@ def real_display(player, cur_floor, enemy):
 
     # the fuckin first person
 
-    # 5-dist tiles:
-
-    # 4-dist tiles:
-
     # 3-dist tiles:
 
+    n_loc = [player.loc[0] + base_change[0]*3 + r_change[0]*2, player.loc[1] + base_change[1]*3 + r_change[1]*2]
+
+    try:
+        if cur_floor.grid[n_loc[0]][n_loc[1]] == "#":
+            if cur_floor.exit == n_loc:
+                the_art = arts["TFD"].copy()
+            else:
+                the_art = arts[random_wall()].copy()
+            the_art = pygame.transform.scale(the_art, (160, 160))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 + 80*5, WINDOW_HEIGHT // 2 - 80))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 + 80*3, WINDOW_HEIGHT // 2 - 80))
+            if cur_floor.exit == n_loc:
+                the_art = arts["TRD"].copy()
+            else:
+                the_art = arts["TR1"].copy()
+            the_art = pygame.transform.scale(the_art, (160, 160))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 80))
+            
+        else:
+            the_art = arts["TD1"].copy()
+            the_art = pygame.transform.scale(the_art, (160, 160))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 80))
+            the_art = arts["TC1"].copy()
+            the_art = pygame.transform.scale(the_art, (160, 160))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 80))
+    except:
+        pass
+
+    n_loc = [player.loc[0] + base_change[0]*3 + r_change[0], player.loc[1] + base_change[1]*3 + r_change[1]]
+
+    try:
+        if cur_floor.grid[n_loc[0]][n_loc[1]] == "#":
+            if cur_floor.exit == n_loc:
+                the_art = arts["TFD"].copy()
+            else:
+                the_art = arts[random_wall()].copy()
+            the_art = pygame.transform.scale(the_art, (160, 160))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 + 80, WINDOW_HEIGHT // 2 - 80))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 + 80+160, WINDOW_HEIGHT // 2 - 80))
+            if cur_floor.exit == n_loc:
+                the_art = arts["TRD"].copy()
+            else:
+                the_art = arts["TR1"].copy()
+            the_art = pygame.transform.scale(the_art, (160, 160))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 80, WINDOW_HEIGHT // 2 - 80))
+            
+        else:
+            the_art = arts["TD1"].copy()
+            the_art = pygame.transform.scale(the_art, (160, 160))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 80))
+            the_art = arts["TC1"].copy()
+            the_art = pygame.transform.scale(the_art, (160, 160))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 80))
+    except:
+        pass
+
+    n_loc = [player.loc[0] + base_change[0]*3 + l_change[0]*2, player.loc[1] + base_change[1]*3 + l_change[1]*2]
+
+    try:
+        if cur_floor.grid[n_loc[0]][n_loc[1]] == "#":
+            if cur_floor.exit == n_loc:
+                the_art = arts["TFD"].copy()
+            else:
+                the_art = arts[random_wall()].copy()
+            the_art = pygame.transform.scale(the_art, (160, 160))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160 - 80*5, WINDOW_HEIGHT // 2 - 80))
+            if cur_floor.exit == n_loc:
+                the_art = arts["TLD"].copy()
+            else:
+                the_art = arts["TL1"].copy()
+            the_art = pygame.transform.scale(the_art, (160, 160))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 80*2, WINDOW_HEIGHT // 2 - 80))
+        else:
+            the_art = arts["TD1"].copy()
+            the_art = pygame.transform.scale(the_art, (160, 160))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160 - 80, WINDOW_HEIGHT // 2 - 80))
+            the_art = arts["TC1"].copy()
+            the_art = pygame.transform.scale(the_art, (160, 160))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160 - 80, WINDOW_HEIGHT // 2 - 80))
+    except:
+        pass
+
+    n_loc = [player.loc[0] + base_change[0]*3 + l_change[0], player.loc[1] + base_change[1]*3 + l_change[1]]
+
+    try:
+        if cur_floor.grid[n_loc[0]][n_loc[1]] == "#":
+            if cur_floor.exit == n_loc:
+                the_art = arts["TFD"].copy()
+            else:
+                the_art = arts[random_wall()].copy()
+            the_art = pygame.transform.scale(the_art, (160, 160))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160 - 80, WINDOW_HEIGHT // 2 - 80))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160*2 - 80, WINDOW_HEIGHT // 2 - 80))
+            if cur_floor.exit == n_loc:
+                the_art = arts["TLD"].copy()
+            else:
+                the_art = arts["TL1"].copy()
+            the_art = pygame.transform.scale(the_art, (160, 160))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 80, WINDOW_HEIGHT // 2 - 80))
+        else:
+            the_art = arts["TD1"].copy()
+            the_art = pygame.transform.scale(the_art, (160, 160))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160, WINDOW_HEIGHT // 2 - 80))
+            the_art = arts["TC1"].copy()
+            the_art = pygame.transform.scale(the_art, (160, 160))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160, WINDOW_HEIGHT // 2 - 80))
+    except:
+        pass
+
+    n_loc = [player.loc[0] + base_change[0]*3, player.loc[1] + base_change[1]*3]
+
+    try:
+        if cur_floor.grid[n_loc[0]][n_loc[1]] == "#":
+            if cur_floor.exit == n_loc:
+                the_art = arts["TFD"].copy()
+            else:
+                the_art = arts[random_wall()].copy()
+            the_art = pygame.transform.scale(the_art, (160, 160))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 80, WINDOW_HEIGHT // 2 - 80))
+        else:
+            the_art = arts["TD1"].copy()
+            the_art = pygame.transform.scale(the_art, (160, 160))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 80, WINDOW_HEIGHT // 2 - 80))
+            the_art = arts["TC1"].copy()
+            the_art = pygame.transform.scale(the_art, (160, 160))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 80, WINDOW_HEIGHT // 2 - 80))
+            
+    except:
+        pass
+
     # 2-dist tiles:
+
+    n_loc = [player.loc[0] + base_change[0]*2 + r_change[0]*2, player.loc[1] + base_change[1]*2 + r_change[1]*2]
+
+    try:
+        if cur_floor.grid[n_loc[0]][n_loc[1]] == "#":
+            if cur_floor.exit == n_loc:
+                the_art = arts["TRD"].copy()
+            else:
+                the_art = arts["TR1"].copy()
+            the_art = pygame.transform.scale(the_art, (320, 320))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 160))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 + 160, WINDOW_HEIGHT // 2 - 160))
+            
+        else:
+            the_art = arts["TD1"].copy()
+            the_art = pygame.transform.scale(the_art, (320, 320))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 + 160, WINDOW_HEIGHT // 2 - 160))
+            the_art = arts["TC1"].copy()
+            the_art = pygame.transform.scale(the_art, (320, 320))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 + 160, WINDOW_HEIGHT // 2 - 160))
+    except:
+        pass
 
     n_loc = [player.loc[0] + base_change[0]*2 + r_change[0], player.loc[1] + base_change[1]*2 + r_change[1]]
 
@@ -633,13 +788,49 @@ def real_display(player, cur_floor, enemy):
                 the_art = arts[random_wall()].copy()
             the_art = pygame.transform.scale(the_art, (320, 320))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 + 160, WINDOW_HEIGHT // 2 - 160))
+            if cur_floor.exit == n_loc:
+                the_art = arts["TRD"].copy()
+            else:
+                the_art = arts["TR1"].copy()
+            the_art = pygame.transform.scale(the_art, (320, 320))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160, WINDOW_HEIGHT // 2 - 160))
+            
         else:
+            """
+            the_art = arts["TD1"].copy()
+            the_art = pygame.transform.scale(the_art, (320, 320))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 + 160, WINDOW_HEIGHT // 2 - 160))
+            the_art = arts["TC1"].copy()
+            the_art = pygame.transform.scale(the_art, (320, 320))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 + 160, WINDOW_HEIGHT // 2 - 160))"""
+            
             the_art = arts["TD1"].copy()
             the_art = pygame.transform.scale(the_art, (320, 320))
             game_window.blit(the_art, (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 160))
             the_art = arts["TC1"].copy()
             the_art = pygame.transform.scale(the_art, (320, 320))
             game_window.blit(the_art, (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 160))
+    except:
+        pass
+
+    n_loc = [player.loc[0] + base_change[0]*2 + l_change[0]*2, player.loc[1] + base_change[1]*2 + l_change[1]*2]
+
+    try:
+        if cur_floor.grid[n_loc[0]][n_loc[1]] == "#":
+            if cur_floor.exit == n_loc:
+                the_art = arts["TLD"].copy()
+            else:
+                the_art = arts["TL1"].copy()
+            the_art = pygame.transform.scale(the_art, (320, 320))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160*2, WINDOW_HEIGHT // 2 - 160))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160*3, WINDOW_HEIGHT // 2 - 160))
+        else:
+            the_art = arts["TD1"].copy()
+            the_art = pygame.transform.scale(the_art, (320, 320))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 320 - 160, WINDOW_HEIGHT // 2 - 160))
+            the_art = arts["TC1"].copy()
+            the_art = pygame.transform.scale(the_art, (320, 320))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 320 - 160, WINDOW_HEIGHT // 2 - 160))
     except:
         pass
 
@@ -653,7 +844,20 @@ def real_display(player, cur_floor, enemy):
                 the_art = arts[random_wall()].copy()
             the_art = pygame.transform.scale(the_art, (320, 320))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160 - 320, WINDOW_HEIGHT // 2 - 160))
+            if cur_floor.exit == n_loc:
+                the_art = arts["TLD"].copy()
+            else:
+                the_art = arts["TL1"].copy()
+            the_art = pygame.transform.scale(the_art, (320, 320))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160, WINDOW_HEIGHT // 2 - 160))
         else:
+            """
+            the_art = arts["TD1"].copy()
+            the_art = pygame.transform.scale(the_art, (320, 320))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160*3, WINDOW_HEIGHT // 2 - 160))
+            the_art = arts["TC1"].copy()
+            the_art = pygame.transform.scale(the_art, (320, 320))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160*3, WINDOW_HEIGHT // 2 - 160))"""
             the_art = arts["TD1"].copy()
             the_art = pygame.transform.scale(the_art, (320, 320))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 - 320, WINDOW_HEIGHT // 2 - 160))
@@ -800,18 +1004,20 @@ def real_display(player, cur_floor, enemy):
         the_art = pygame.transform.scale(the_art, (640*2, 640*2))
         game_window.blit(the_art, (WINDOW_WIDTH // 2 - 640, WINDOW_HEIGHT // 2 - 640))
     except:
-        pass      
+        pass
 
-    # blur
+    if console_data["Last Command"] != "vision":
 
-    surfaces = blurScreen(game_window)
+        # blur & dark
 
-    game_window.blit(surfaces[3], (0, 0))
-    game_window.blit(surfaces[2], (WINDOW_WIDTH // 12, WINDOW_HEIGHT // 12))
-    game_window.blit(surfaces[1], (WINDOW_WIDTH // 6, WINDOW_HEIGHT // 6))
-    game_window.blit(surfaces[0], (WINDOW_WIDTH // 3, WINDOW_HEIGHT // 3))
+        surfaces = blurScreen(game_window)
 
-    #draw_trans_rect(game_window, (0,0,0), (128), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT))
+        game_window.blit(surfaces[3], (0, 0))
+        game_window.blit(surfaces[2], (WINDOW_WIDTH // 12, WINDOW_HEIGHT // 12))
+        game_window.blit(surfaces[1], (WINDOW_WIDTH // 6, WINDOW_HEIGHT // 6))
+        game_window.blit(surfaces[0], (WINDOW_WIDTH // 3, WINDOW_HEIGHT // 3))
+
+        draw_trans_rect(game_window, (0,0,0), (160), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT))
 
 def random_wall():
     return random.choice(["TF1", "TF2", "TF3", "TF4"])
@@ -836,7 +1042,7 @@ console_log = []
 console_data = {"Message": "",
                 "Typing": False,
                 "Command": "",
-                "Last Command": "",
+                "Last Command": "vision",
                 "FPS": False}
     
 PLAT_VER = "WIN"
