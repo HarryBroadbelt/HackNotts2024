@@ -7,3 +7,6 @@ Ideas:
  - I'm on vacation
  - every single day
  - because I love my occupation
+
+# REQUIREMENTS
+PyGame, pillow
