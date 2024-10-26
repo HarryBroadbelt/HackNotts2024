@@ -82,7 +82,7 @@ class Enemy():
                     self.x = self.x
                     self.y = self.y + 1
                     break
-                elif(rng == 4 and grid[self.x+1,self.y-1] != '#'):
+                elif(rng == 4 and grid[self.x,self.y-1] != '#'):
                     self.x = self.x
                     self.y = self.y - 1
                     break
