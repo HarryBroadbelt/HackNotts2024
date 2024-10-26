@@ -16,7 +16,7 @@ class Enemy():
 
     def noticed_player(self, grid, player_location, player_direction):
         wall_present=False
-        if(self.x == player_location[0]): #if enemy and player on same row
+        if(self.y == player_location[1]): #if enemy and player on same row
             if(self.x - player_location[0]<0): #enemy is to the left of the player
                 for i in range(self.x, player_location[0],1): #check to see if a wall exists between the enemy and player
                     if(grid[i][self.y]=='#'):
@@ -25,7 +25,7 @@ class Enemy():
                 for i in range(self.x, player_location[0],-1): #check to see if a wall exists between the enemy and player
                     if(grid[i][self.y]=='#'):
                         wall_present=True
-        elif(self.y == player_location[1]): #if enemy and player are on same column
+        elif(self.x== player_location[0]): #if enemy and player are on same column
             if(self.y-player_location[1]<0): #enemy is below the player
                 for i in range(self.y, player_location[1], 1): #check to see if a wall exists between the enemy and player
                     if(grid[self.x][i]=='#'):
