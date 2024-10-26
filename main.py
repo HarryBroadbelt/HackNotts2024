@@ -590,6 +590,7 @@ def real_display(player, cur_floor, enemy):
     #print(random.randint(0, 100))
     pygame.draw.rect(game_window, (154, 154, 154), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT // 2))
     pygame.draw.rect(game_window, (158, 159, 125), (0, WINDOW_HEIGHT // 2, WINDOW_WIDTH, WINDOW_HEIGHT // 2))
+    pygame.draw.rect(game_window, (0,0,0), (0, WINDOW_HEIGHT // 2 - 80, WINDOW_WIDTH, 160))
 
     #game_window.blit(test_img, (0, 0))
 
@@ -622,6 +623,67 @@ def real_display(player, cur_floor, enemy):
 
     # 2-dist tiles:
 
+    n_loc = [player.loc[0] + base_change[0]*2 + r_change[0], player.loc[1] + base_change[1]*2 + r_change[1]]
+
+    try:
+        if cur_floor.grid[n_loc[0]][n_loc[1]] == "#":
+            if cur_floor.exit == n_loc:
+                the_art = arts["TFD"].copy()
+            else:
+                the_art = arts[random_wall()].copy()
+            the_art = pygame.transform.scale(the_art, (320, 320))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 + 160, WINDOW_HEIGHT // 2 - 160))
+        else:
+            the_art = arts["TD1"].copy()
+            the_art = pygame.transform.scale(the_art, (320, 320))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 160))
+            the_art = arts["TC1"].copy()
+            the_art = pygame.transform.scale(the_art, (320, 320))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 160))
+    except:
+        pass
+
+    n_loc = [player.loc[0] + base_change[0]*2 + l_change[0], player.loc[1] + base_change[1]*2 + l_change[1]]
+
+    try:
+        if cur_floor.grid[n_loc[0]][n_loc[1]] == "#":
+            if cur_floor.exit == n_loc:
+                the_art = arts["TFD"].copy()
+            else:
+                the_art = arts[random_wall()].copy()
+            the_art = pygame.transform.scale(the_art, (320, 320))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160 - 320, WINDOW_HEIGHT // 2 - 160))
+        else:
+            the_art = arts["TD1"].copy()
+            the_art = pygame.transform.scale(the_art, (320, 320))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 320, WINDOW_HEIGHT // 2 - 160))
+            the_art = arts["TC1"].copy()
+            the_art = pygame.transform.scale(the_art, (320, 320))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 320, WINDOW_HEIGHT // 2 - 160))
+    except:
+        pass
+
+    n_loc = [player.loc[0] + base_change[0]*2, player.loc[1] + base_change[1]*2]
+
+    try:
+        if cur_floor.grid[n_loc[0]][n_loc[1]] == "#":
+            if cur_floor.exit == n_loc:
+                the_art = arts["TFD"].copy()
+            else:
+                the_art = arts[random_wall()].copy()
+            the_art = pygame.transform.scale(the_art, (320, 320))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160, WINDOW_HEIGHT // 2 - 160))
+        else:
+            the_art = arts["TD1"].copy()
+            the_art = pygame.transform.scale(the_art, (320, 320))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160, WINDOW_HEIGHT // 2 - 160))
+            the_art = arts["TC1"].copy()
+            the_art = pygame.transform.scale(the_art, (320, 320))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160, WINDOW_HEIGHT // 2 - 160))
+            
+    except:
+        pass
+
     # 1-dist tiles:
 
     n_loc = [player.loc[0] + base_change[0] + l_change[0], player.loc[1] + base_change[1] + l_change[1]]
@@ -641,6 +703,14 @@ def real_display(player, cur_floor, enemy):
                 the_art = arts["TL1"].copy()
             the_art = pygame.transform.scale(the_art, (640, 640))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 - 320, WINDOW_HEIGHT // 2 - 320))
+
+        else:
+            the_art = arts["TD1"].copy()
+            the_art = pygame.transform.scale(the_art, (640, 640))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 640, WINDOW_HEIGHT // 2 - 320))
+            the_art = arts["TC1"].copy()
+            the_art = pygame.transform.scale(the_art, (640, 640))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 640, WINDOW_HEIGHT // 2 - 320))
     except:
         pass
 
@@ -661,6 +731,15 @@ def real_display(player, cur_floor, enemy):
                 the_art = arts["TR1"].copy()
             the_art = pygame.transform.scale(the_art, (640, 640))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 - 320, WINDOW_HEIGHT // 2 - 320))
+
+        else:
+            the_art = arts["TD1"].copy()
+            the_art = pygame.transform.scale(the_art, (640, 640))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 320))
+            the_art = arts["TC1"].copy()
+            the_art = pygame.transform.scale(the_art, (640, 640))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 320))
+            
     except:
         pass
 
@@ -672,6 +751,14 @@ def real_display(player, cur_floor, enemy):
                 the_art = arts["TFD"].copy()
             else:
                 the_art = arts[random_wall()].copy()
+            the_art = pygame.transform.scale(the_art, (640, 640))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 320, WINDOW_HEIGHT // 2 - 320))
+
+        else:
+            the_art = arts["TD1"].copy()
+            the_art = pygame.transform.scale(the_art, (640, 640))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2 - 320, WINDOW_HEIGHT // 2 - 320))
+            the_art = arts["TC1"].copy()
             the_art = pygame.transform.scale(the_art, (640, 640))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 - 320, WINDOW_HEIGHT // 2 - 320))
     except:
@@ -709,6 +796,9 @@ def real_display(player, cur_floor, enemy):
         the_art = arts["TD1"].copy()
         the_art = pygame.transform.scale(the_art, (640*2, 640*2))
         game_window.blit(the_art, (WINDOW_WIDTH // 2 - 640, WINDOW_HEIGHT // 2 - 640))
+        the_art = arts["TC1"].copy()
+        the_art = pygame.transform.scale(the_art, (640*2, 640*2))
+        game_window.blit(the_art, (WINDOW_WIDTH // 2 - 640, WINDOW_HEIGHT // 2 - 640))
     except:
         pass      
 
@@ -721,7 +811,7 @@ def real_display(player, cur_floor, enemy):
     game_window.blit(surfaces[1], (WINDOW_WIDTH // 6, WINDOW_HEIGHT // 6))
     game_window.blit(surfaces[0], (WINDOW_WIDTH // 3, WINDOW_HEIGHT // 3))
 
-    draw_trans_rect(game_window, (0,0,0), (128), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT))
+    #draw_trans_rect(game_window, (0,0,0), (128), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT))
 
 def random_wall():
     return random.choice(["TF1", "TF2", "TF3", "TF4"])
