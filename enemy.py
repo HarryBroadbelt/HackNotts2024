@@ -15,9 +15,12 @@ class Enemy():
 
 
     def noticed_player(self, grid, player_location, player_direction):
+        self.noticed = False
+        same_row = False
         wall_present=False
         print('1')
         if(self.y == player_location[1]): #if enemy and player on same row
+            same_row = True
             print('2')
             if(self.x - player_location[0]<0): #enemy is to the left of the player
                 print('3')
@@ -30,6 +33,7 @@ class Enemy():
                     if(grid[i][self.y]=='#'):
                         wall_present=True
         elif(self.x== player_location[0]): #if enemy and player are on same column
+            same_row = True
             print('5')
             if(self.y-player_location[1]<0): #enemy is below the player
                 print('6')
@@ -42,7 +46,7 @@ class Enemy():
                     if(grid[self.x][i]=='#'):
                         wall_present=True
 
-        if(wall_present):
+        if(wall_present or same_row == False):
             return False
         
         self.noticed=True
@@ -53,13 +57,13 @@ class Enemy():
         return self.noticed
     
     def move_towards_player(self, grid, distance, player_location):
-        if(self.x-player_location[0]<0 and self.x==player_location[0]):
+        if(self.x-player_location[0]<0 and self.y==player_location[1]):
             self.x=self.x+distance
-        elif(self.x-player_location[0]>0 and self.x==player_location[0]):
+        elif(self.x-player_location[0]>0 and self.y==player_location[1]):
             self.x=self.x-distance
-        elif(self.y-player_location[1]<0 and self.y==player_location[1]):
+        elif(self.y-player_location[1]<0 and self.x==player_location[0]):
             self.y=self.y-distance
-        elif(self.y-player_location[1]<0 and self.y==player_location[1]):
+        elif(self.y-player_location[1]<0 and self.x==player_location[0]):
             self.y=self.y+distance
 
         return [self.x,self.y]
