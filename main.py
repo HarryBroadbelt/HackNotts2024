@@ -159,6 +159,63 @@ def quit_game():
 
 ### GAME CLASSES / FUNCTIONS
 
+class Player:
+
+    def __init__(self, loc = [1, 1]):
+        self.loc = loc
+        self.dir = random.choice(["U", "D", "L", "R"])
+
+class Floor:
+
+    def __init__(self):
+
+        LV_GEN = "set"
+
+        if LV_GEN == "set":
+
+            self.grid = [["#","#","#","#","#","#","#","#","#","#","#"],
+                         ["#"," "," "," ","#","#","#"," "," "," ","#"],
+                         ["#"," ","#"," "," "," "," "," ","#"," ","#"],
+                         ["#"," "," ","#","#"," ","#","#"," "," ","#"],
+                         ["#","#"," ","#","#"," ","#","#"," ","#","#"],
+                         ["#","#"," "," "," "," "," "," "," ","#","#"],
+                         ["#","#"," ","#","#"," ","#","#"," ","#","#"],
+                         ["#"," "," ","#","#"," ","#","#"," "," ","#"],
+                         ["#"," ","#"," "," "," "," "," ","#"," ","#"],
+                         ["#"," "," "," ","#","#","#"," "," "," ","#"],
+                         ["#","#","#","#","#","#","#","#","#","#","#"]]
+
+        if LV_GEN == "rand":
+
+            MAX_SIZE = 11
+            MAX_TUNNELS = 20
+            MAX_LENGTH = 8
+
+            self.grid = []
+
+            for i in range(MAX_SIZE):
+                self.grid.append([])
+                for j in range(MAX_SIZE):
+                    self.grid[-1].append("#")
+
+            tunnel = [random.randint(1, MAX_SIZE - 2), random.randint(1, MAX_SIZE - 2)]
+
+            for i in range(MAX_TUNNELS):
+                tunnel_dir = random.choice([[0, 1], [1, 0], [0, -1], [-1, 0]])
+                for j in range(random.randint(1, MAX_LENGTH)):
+                    self.grid[tunnel[0]][tunnel[1]] = " "
+                    tunnel = [tunnel[0] + tunnel_dir[0], tunnel[1] + tunnel_dir[1]]
+                    if tunnel[0] == 0:
+                        tunnel[0] = 1
+                    if tunnel[0] == MAX_SIZE - 1:
+                        tunnel[0] = MAX_SIZE - 2
+                    if tunnel[1] == 0:
+                        tunnel[1] = 1
+                    if tunnel[1] == MAX_SIZE - 1:
+                        tunnel[1] = MAX_SIZE - 2
+
+        print(self.grid)
+
 ### MAIN FUNCTION
 
 def main():
@@ -271,18 +328,37 @@ def main():
 
             clock.tick(FRAMERATE)
 
-            game_window.fill((255, 255, 255))
-     
-            window_resize()
+            game_over = False
 
-            events = global_inputs()
-            
-            for event in events:
-                if event.type == pygame.KEYDOWN:
-                                    
-                    if event.key == pygame.K_SPACE or event.key == pygame.K_RETURN:
-                        game_state = "MAIN MENU"
-                        log(("new game state: " + game_state))
+            floors_cleared = 0
+            new_floor = True            
+
+            while game_over == False:
+
+                clock.tick(FRAMERATE)
+
+                ## NEW FRAME
+
+                if new_floor == True:
+                    new_floor = False
+                    cur_floor = Floor()
+
+                ## DISPLAY
+
+                game_window.fill((255, 255, 255))
+         
+                window_resize()
+
+                ## INPUTS
+
+                events = global_inputs()
+                
+                for event in events:
+                    if event.type == pygame.KEYDOWN:
+                                        
+                        if event.key == pygame.K_SPACE or event.key == pygame.K_RETURN:
+                            game_state = "MAIN MENU"
+                            log(("new game state: " + game_state))
 
 # Create width and height constants
 WINDOW_WIDTH = 960
