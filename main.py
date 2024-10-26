@@ -534,7 +534,7 @@ def main():
 
                     # enemy mov
 
-                    if en_mov_timer == 0:
+                    if en_mov_timer == 0 and False:
 
                         en_mov_timer = FRAMERATE
 
@@ -656,6 +656,12 @@ def real_display(player, cur_floor, enemy):
             the_art = arts["TC1"].copy()
             the_art = pygame.transform.scale(the_art, (160, 160))
             game_window.blit(the_art, (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 80))
+            
+            if enemy.x == n_loc[0] and enemy.y == n_loc[1]:
+                the_art = enemy.art
+                the_art = pygame.transform.scale(the_art, (160, 160))
+                game_window.blit(the_art, (WINDOW_WIDTH // 2 + 80*5, WINDOW_HEIGHT // 2 - 80))
+                game_window.blit(the_art, (WINDOW_WIDTH // 2 + 80*3, WINDOW_HEIGHT // 2 - 80))
     except:
         pass
 
@@ -703,6 +709,12 @@ def real_display(player, cur_floor, enemy):
                 the_art = arts["TL1"].copy()
             the_art = pygame.transform.scale(the_art, (160, 160))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 - 80*2, WINDOW_HEIGHT // 2 - 80))
+        else:
+            
+            if enemy.x == n_loc[0] and enemy.y == n_loc[1]:
+                the_art = enemy.art
+                the_art = pygame.transform.scale(the_art, (160, 160))
+                game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160 - 80*5, WINDOW_HEIGHT // 2 - 80))
     except:
         pass
 
@@ -750,6 +762,11 @@ def real_display(player, cur_floor, enemy):
             the_art = arts["TC1"].copy()
             the_art = pygame.transform.scale(the_art, (160, 160))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 - 80, WINDOW_HEIGHT // 2 - 80))
+            
+            if enemy.x == n_loc[0] and enemy.y == n_loc[1]:
+                the_art = enemy.art
+                the_art = pygame.transform.scale(the_art, (160, 160))
+                game_window.blit(the_art, (WINDOW_WIDTH // 2 - 80, WINDOW_HEIGHT // 2 - 80))
             
     except:
         pass
@@ -810,6 +827,11 @@ def real_display(player, cur_floor, enemy):
             the_art = arts["TC1"].copy()
             the_art = pygame.transform.scale(the_art, (320, 320))
             game_window.blit(the_art, (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 160))
+            
+            if enemy.x == n_loc[0] and enemy.y == n_loc[1]:
+                the_art = enemy.art
+                the_art = pygame.transform.scale(the_art, (320, 320))
+                game_window.blit(the_art, (WINDOW_WIDTH // 2 + 160, WINDOW_HEIGHT // 2 - 160))
     except:
         pass
 
@@ -864,6 +886,11 @@ def real_display(player, cur_floor, enemy):
             the_art = arts["TC1"].copy()
             the_art = pygame.transform.scale(the_art, (320, 320))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 - 320, WINDOW_HEIGHT // 2 - 160))
+            
+            if enemy.x == n_loc[0] and enemy.y == n_loc[1]:
+                the_art = enemy.art
+                the_art = pygame.transform.scale(the_art, (320, 320))
+                game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160 - 320, WINDOW_HEIGHT // 2 - 160))
     except:
         pass
 
@@ -884,6 +911,11 @@ def real_display(player, cur_floor, enemy):
             the_art = arts["TC1"].copy()
             the_art = pygame.transform.scale(the_art, (320, 320))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160, WINDOW_HEIGHT // 2 - 160))
+            
+            if enemy.x == n_loc[0] and enemy.y == n_loc[1]:
+                the_art = enemy.art
+                the_art = pygame.transform.scale(the_art, (320, 320))
+                game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160, WINDOW_HEIGHT // 2 - 160))
             
     except:
         pass
@@ -915,6 +947,11 @@ def real_display(player, cur_floor, enemy):
             the_art = arts["TC1"].copy()
             the_art = pygame.transform.scale(the_art, (640, 640))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 - 640, WINDOW_HEIGHT // 2 - 320))
+            
+            if enemy.x == n_loc[0] and enemy.y == n_loc[1]:
+                the_art = enemy.art
+                the_art = pygame.transform.scale(the_art, (640, 640))
+                game_window.blit(the_art, (WINDOW_WIDTH // 2 - 320 - 640, WINDOW_HEIGHT // 2 - 320))
     except:
         pass
 
@@ -944,6 +981,11 @@ def real_display(player, cur_floor, enemy):
             the_art = pygame.transform.scale(the_art, (640, 640))
             game_window.blit(the_art, (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 320))
             
+            if enemy.x == n_loc[0] and enemy.y == n_loc[1]:
+                the_art = enemy.art
+                the_art = pygame.transform.scale(the_art, (640, 640))
+                game_window.blit(the_art, (WINDOW_WIDTH // 2 + 320, WINDOW_HEIGHT // 2 - 320))
+            
     except:
         pass
 
@@ -965,6 +1007,11 @@ def real_display(player, cur_floor, enemy):
             the_art = arts["TC1"].copy()
             the_art = pygame.transform.scale(the_art, (640, 640))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 - 320, WINDOW_HEIGHT // 2 - 320))
+            
+            if enemy.x == n_loc[0] and enemy.y == n_loc[1]:
+                the_art = enemy.art
+                the_art = pygame.transform.scale(the_art, (640, 640))
+                game_window.blit(the_art, (WINDOW_WIDTH // 2 - 320, WINDOW_HEIGHT // 2 - 320))
     except:
         pass
 
@@ -1060,8 +1107,10 @@ arts = {}
 for art in art_list:
     arts[art] = pygame.image.load((art + ".png"))
 
-en_types = ["Meaty Michael"]
+en_types = ["Meaty Michael", "Chaser", "Phased"]
 
-en_art = {"Meaty Michael": pygame.image.load("En1.png")}
+en_art = {"Meaty Michael": pygame.image.load("En1.png"),
+          "Chaser": pygame.image.load("En2.png"),
+          "Phased": pygame.image.load("En3.png")}
             
 main()
