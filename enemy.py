@@ -40,7 +40,9 @@ class Enemy():
         
         self.noticed=True
         if(self.type=='Chaser'):
-            self.aggression=self.aggression+3
+            self.current_aggro=self.current_aggro+3
+            if(self.current_aggro>self.attributes['max_aggro']):
+                self.current_aggro=self.attributes['max_aggro']
         return self.noticed
     
     def move_towards_player(self, grid, distance, player_location):
