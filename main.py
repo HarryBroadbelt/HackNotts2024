@@ -573,6 +573,9 @@ def main():
                         en_mov_timer = FRAMERATE
                         if enemy.current_aggro >= 6:
                             en_mov_timer = FRAMERATE // 2
+                        
+                        if enemy.type == 'Spectre':
+                            en_move_timer = FRAMERATE // 2
 
                         if enemy.noticed == True and already_spotted == False:
                             print("yeah")
