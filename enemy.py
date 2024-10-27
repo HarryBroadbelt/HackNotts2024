@@ -7,7 +7,7 @@ ENEMY TYPES:
 - Stalker: Teleports randomly nearby the player. If the player sees them they must look away within x seconds or it starts to chase.
 - Meaty Michael: Stops moving if it sees the player
 - Phased: Moves randomly but can move through walls at a greatly reduced rate
-
+- Spectre: Moves very fast randomly
 """
 
 
@@ -24,6 +24,8 @@ class Enemy():
             max_aggro = 3
         elif(type=='Phased'):
             max_aggro = 6
+        elif(type=='Spectre'):
+            max_aggro = 8
         self.velocity=velocity
         self.x=x
         self.y=y
