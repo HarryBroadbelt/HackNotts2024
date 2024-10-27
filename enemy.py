@@ -65,7 +65,6 @@ class Enemy():
             return False
         
         self.noticed=True
-        print
         if(self.type=='Chaser'):
             self.current_aggro=self.current_aggro+3
             if(self.current_aggro>self.attributes['max_aggro']):
