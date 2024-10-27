@@ -85,12 +85,15 @@ class Floor:
         
         if LV_GEN == "rand":
             
-            MAX_SIZE = 30
-            MAX_TUNNELS = 50
-            MAX_LENGTH = 15
+            
             while not exitFound and not playerPlaced and not monsterPlaced and not aStarPassed:
+                MAX_SIZE = 30
+                MAX_TUNNELS = 50
+                MAX_LENGTH = 15
                 exitFound = False
                 playerPlaced = False
+                monsterPlaced = False
+                aStarPassed = False
                 self.grid = []
 
                 for i in range(MAX_SIZE):
@@ -225,4 +228,7 @@ if __name__ == "__main__":
     floor = Floor()
     for i in range(30):
         print(floor.grid[i])
+    print(floor.playerSpawn)
+    print(floor.exit)
+    print(floor.monsterSpawn)
 
