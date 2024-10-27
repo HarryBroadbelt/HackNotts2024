@@ -95,11 +95,13 @@ def findExit(floor,i,u):
         for offset in range(-1,2):
             try:
                 if floor.grid[i+offset][u] == " ":
+                    floor.exit = (i,u)
                     return True
             except IndexError:
                 pass
             try:
                 if floor.grid[i][u+offset] == " ":
+                    floor.exit = (i,u)
                     return True
             except IndexError:
                 pass
@@ -123,9 +125,9 @@ class Floor:
         aStarPassed = False
             
         while not exitFound or not playerPlaced or not monsterPlaced or not aStarPassed:
-            MAX_SIZE = 15
-            MAX_TUNNELS = 60
-            MAX_LENGTH = 8
+            MAX_SIZE = 30
+            MAX_TUNNELS = 100
+            MAX_LENGTH = 10
             self.exit = [1, 0]
             self.playerSpawn = [0,1]
             self.monsterSpawn = [0,0]
@@ -208,27 +210,8 @@ class Floor:
             for i in range(1,randI):
                 for u in range(1,randU):
                     if not exitFound:
-<<<<<<< HEAD
                         exitFound = findExit(self,i,u)
                         print(exitFound)
-=======
-                        if self.grid[i][u] == "#":
-                            
-                            surroundingWalls = 0
-                            try:
-                                if self.grid[i+offset][u] == "#":
-                                    surroundingWalls += 1
-                            except IndexError:
-                                pass
-                            try:
-                                if self.grid[i][u+offset] == "#":
-                                    surroundingWalls += 1
-                            except IndexError:
-                                pass
-                            if surroundingWalls == 5:
-                                self.exit = [i,u]
-                                exitFound = True
->>>>>>> d223dae0203076a06c052d0c4784074518c8fe96
                     if self.grid[i][u] == " ":
                         try:
                             if self.grid[i][u+1] == " " or self.grid[i][u-1] == " ":
@@ -251,13 +234,13 @@ class Floor:
                         except IndexError:
                             pass
                     if exitFound and self.grid[i][u] == " " and not playerPlaced:
-                        if maths.sqrt((i-self.exit[0])**2+(u-self.exit[1])**2) >= 8:
+                        if maths.sqrt((i-self.exit[0])**2+(u-self.exit[1])**2) >= 12:
                             self.playerSpawn = [i,u]
                             playerPlaced = True
             crazyList = []
             for i in range(1,MAX_SIZE):
                 for u in range(1,MAX_SIZE):
-                    if self.grid[i][u] == " " and (i,u) != self.exit and (i,u) != self.playerSpawn and maths.sqrt((i-self.playerSpawn[0])**2+(u-self.playerSpawn[1])**2) >= 8:
+                    if self.grid[i][u] == " " and (i,u) != self.exit and (i,u) != self.playerSpawn and maths.sqrt((i-self.playerSpawn[0])**2+(u-self.playerSpawn[1])**2) >= 12:
                         crazyList.append((i,u))
             self.monsterSpawn = random.choice(crazyList)
             monsterPlaced = True
@@ -272,7 +255,7 @@ class Floor:
         #print(self.grid)
 if __name__ == "__main__":
     floor = Floor()
-    for i in range(len(floor.grid)):
+    for i in range(30):
         print(floor.grid[i])
     print(floor.playerSpawn)
     print(floor.exit)
