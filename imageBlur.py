@@ -23,5 +23,3 @@ def blurScreen(screen: pygame.Surface) -> (pygame.Surface,pygame.Surface,pygame.
     level1 = gaussian(level1, 3)
     level0 = gaussian(level0, 2)
     return (level0,level1,level2,level3)
-    
-    

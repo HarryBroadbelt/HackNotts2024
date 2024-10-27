@@ -3,6 +3,7 @@ import random, copy, pygame, sys, os, math, time, asyncio
 from enemy import Enemy
 from imageBlur import blurScreen
 from sounds import findSoundDirection, checkWalls, soundVolume, distFinder, Direction
+from floorGen import Floor
 
 ### TEMPLATE FUNCTIONS
 
@@ -169,6 +170,8 @@ class Player:
         #self.dir = random.choice(["U", "D", "L", "R"])
         self.dir = "U"
         self.new_floor = False
+        self.footstepSound = pygame.mixer.Sound("playerFootstep.ogg")
+        self.audioChannel = pygame.mixer.Channel(2)
 
     def turn_left(self):
         if self.dir == "U":
@@ -234,7 +237,9 @@ class Player:
                 
         if grid[self.loc[0]][self.loc[1]] == "#":
             self.loc = copy.deepcopy(cur_loc)
-
+        else:
+            self.audioChannel.play(self.footstepSound)
+"""
 class Floor:
 
     def __init__(self):
@@ -287,7 +292,8 @@ class Floor:
                         tunnel[1] = MAX_SIZE - 2
 
         print(self.grid)
-
+"""
+ # commented out as it's unecessary
 ### MAIN FUNCTION
 
 def main():
@@ -428,7 +434,7 @@ def main():
 
             dis_type = "REAL"
 
-            sound_channel = pygame.mixer.Channel(4144)
+            sound_channel = pygame.mixer.Channel(1)
 
             while game_over == False:
 
@@ -446,6 +452,10 @@ def main():
                     new_display = True
                     new_floor = False
                     cur_floor = Floor()
+                    for i in range(30):
+                        print(cur_floor.grid[i])
+                    print(cur_floor.playerSpawn)
+                    print(cur_floor.exit)
                     loc = [1, 1]
                     player = Player(loc)
                     en_typ = random.choice(en_types)
@@ -553,12 +563,16 @@ def main():
                             
                             new_display = True
 
-                            print(en_sounds[enemy.type]["Move"])
+                            sound_dir = findSoundDirection(player.loc, player.dir, copy.deepcopy(en_loc))
+                            sound_muffle = checkWalls(cur_floor.grid, copy.deepcopy(en_loc), player.loc)
+                            sound_dist = math.dist(copy.deepcopy(en_loc), player.loc)
+                            print(sound_dir, sound_muffle, sound_dist)
+                            l_v, r_v = soundVolume(sound_dist, sound_dir, sound_muffle)
 
-                            sound_dir = findSoundDirection(player.loc, player.dir, en_loc)
-                            sound_muffle = checkWalls(cur_floor.grid, en_loc, player.loc)
-                            sound_dist = distFinder(en_loc, player.loc)
-                            en_sounds[enemy.type]["Move"].set_volume(soundVolume(sound_dist, sound_dir, sound_muffle))
+                            print(l_v, r_v)
+
+                            sound_channel.play(en_sounds[enemy.type]["Move"])
+                            sound_channel.set_volume(l_v, r_v)
                             
 
                     if enemy.x == player.loc[0] and enemy.y == player.loc[1]: # player caught
@@ -649,16 +663,16 @@ def real_display(player, cur_floor, enemy, floor_num = 0):
     try:
         if cur_floor.grid[n_loc[0]][n_loc[1]] == "#":
             if cur_floor.exit == n_loc:
-                the_art = arts["TFD"].copy()
+                the_art = gaussian(arts["TFD"].copy(),3)
             else:
-                the_art = arts[random_wall()].copy()
+                the_art = gaussian(arts[random_wall()].copy(), 3)
             the_art = pygame.transform.scale(the_art, (160, 160))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 + 80*5, WINDOW_HEIGHT // 2 - 80))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 + 80*3, WINDOW_HEIGHT // 2 - 80))
             if cur_floor.exit == n_loc:
-                the_art = arts["TRD"].copy()
+                the_art = gaussian(arts["TRD"].copy(), 3)
             else:
-                the_art = arts["TR1"].copy()
+                the_art = gaussian(arts["TR1"].copy(), 3)
             the_art = pygame.transform.scale(the_art, (160, 160))
             game_window.blit(the_art, (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 80))
             
@@ -680,24 +694,24 @@ def real_display(player, cur_floor, enemy, floor_num = 0):
     try:
         if cur_floor.grid[n_loc[0]][n_loc[1]] == "#":
             if cur_floor.exit == n_loc:
-                the_art = arts["TFD"].copy()
+                the_art = gaussian(arts["TFD"].copy(), 3)
             else:
-                the_art = arts[random_wall()].copy()
+                the_art = gaussian(arts[random_wall()].copy(), 3)
             the_art = pygame.transform.scale(the_art, (160, 160))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 + 80, WINDOW_HEIGHT // 2 - 80))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 + 80+160, WINDOW_HEIGHT // 2 - 80))
             if cur_floor.exit == n_loc:
-                the_art = arts["TRD"].copy()
+                the_art = gaussian(arts["TRD"].copy(), 3)
             else:
-                the_art = arts["TR1"].copy()
+                the_art = gaussian(arts["TR1"].copy(), 3)
             the_art = pygame.transform.scale(the_art, (160, 160))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 - 80, WINDOW_HEIGHT // 2 - 80))
             
         else:
-            the_art = arts["TD1"].copy()
+            the_art = gaussian(arts["TD1"].copy(), 3)
             the_art = pygame.transform.scale(the_art, (160, 160))
             game_window.blit(the_art, (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 80))
-            the_art = arts["TC1"].copy()
+            the_art = gaussian(arts["TC1"].copy(), 3)
             the_art = pygame.transform.scale(the_art, (160, 160))
             game_window.blit(the_art, (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 80))
                 
@@ -709,15 +723,15 @@ def real_display(player, cur_floor, enemy, floor_num = 0):
     try:
         if cur_floor.grid[n_loc[0]][n_loc[1]] == "#":
             if cur_floor.exit == n_loc:
-                the_art = arts["TFD"].copy()
+                the_art = gaussian(arts["TFD"].copy(), 3)
             else:
                 the_art = arts[random_wall()].copy()
             the_art = pygame.transform.scale(the_art, (160, 160))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160 - 80*5, WINDOW_HEIGHT // 2 - 80))
             if cur_floor.exit == n_loc:
-                the_art = arts["TLD"].copy()
+                the_art = gaussian(arts["TLD"].copy(), 3)
             else:
-                the_art = arts["TL1"].copy()
+                the_art = gaussian(arts["TL1"].copy(), 3)
             the_art = pygame.transform.scale(the_art, (160, 160))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 - 80*2, WINDOW_HEIGHT // 2 - 80))
     except:
@@ -728,23 +742,23 @@ def real_display(player, cur_floor, enemy, floor_num = 0):
     try:
         if cur_floor.grid[n_loc[0]][n_loc[1]] == "#":
             if cur_floor.exit == n_loc:
-                the_art = arts["TFD"].copy()
+                the_art = gaussian(arts["TFD"].copy(), 3)
             else:
-                the_art = arts[random_wall()].copy()
+                the_art = gaussian(arts[random_wall()].copy(), 3)
             the_art = pygame.transform.scale(the_art, (160, 160))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160 - 80, WINDOW_HEIGHT // 2 - 80))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160*2 - 80, WINDOW_HEIGHT // 2 - 80))
             if cur_floor.exit == n_loc:
-                the_art = arts["TLD"].copy()
+                the_art = gaussian(arts["TLD"].copy(), 3)
             else:
-                the_art = arts["TL1"].copy()
+                the_art = gaussian(arts["TL1"].copy(), 3)
             the_art = pygame.transform.scale(the_art, (160, 160))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 - 80, WINDOW_HEIGHT // 2 - 80))
         else:
-            the_art = arts["TD1"].copy()
+            the_art = gaussian(arts["TD1"].copy(), 3)
             the_art = pygame.transform.scale(the_art, (160, 160))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160, WINDOW_HEIGHT // 2 - 80))
-            the_art = arts["TC1"].copy()
+            the_art = gaussian(arts["TC1"].copy(), 3)
             the_art = pygame.transform.scale(the_art, (160, 160))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160, WINDOW_HEIGHT // 2 - 80))
     except:
@@ -755,21 +769,21 @@ def real_display(player, cur_floor, enemy, floor_num = 0):
     try:
         if cur_floor.grid[n_loc[0]][n_loc[1]] == "#":
             if cur_floor.exit == n_loc:
-                the_art = arts["TFD"].copy()
+                the_art = gaussian(arts["TFD"].copy(), 3)
             else:
-                the_art = arts[random_wall()].copy()
+                the_art = gaussian(arts[random_wall()].copy(), 3)
             the_art = pygame.transform.scale(the_art, (160, 160))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 - 80, WINDOW_HEIGHT // 2 - 80))
         else:
-            the_art = arts["TD1"].copy()
+            the_art = gaussian(arts["TD1"].copy(), 3)
             the_art = pygame.transform.scale(the_art, (160, 160))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 - 80, WINDOW_HEIGHT // 2 - 80))
-            the_art = arts["TC1"].copy()
+            the_art = gaussian(arts["TC1"].copy(), 3)
             the_art = pygame.transform.scale(the_art, (160, 160))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 - 80, WINDOW_HEIGHT // 2 - 80))
             
             if enemy.x == n_loc[0] and enemy.y == n_loc[1]:
-                the_art = enemy.art
+                the_art = gaussian(enemy.art, 3)
                 the_art = pygame.transform.scale(the_art, (160, 160))
                 game_window.blit(the_art, (WINDOW_WIDTH // 2 - 80, WINDOW_HEIGHT // 2 - 80))
             
