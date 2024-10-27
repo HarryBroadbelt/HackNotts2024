@@ -643,14 +643,20 @@ def main():
 
                 clock.tick(FRAMERATE)
 
-                game_window.fill((255, 255, 255))
-                
-                font = pygame.font.Font(resource_path('Kenney Pixel.ttf'), 120)
+                if go_frame > 5:
 
-                text = font.render("GAME OVER", True, (0, 0, 0))
-                game_window.blit(text, (WINDOW_WIDTH // 2- text.get_width() // 2, 20))
+                    game_window.fill((40, 20, 20))
+                    
+                    font = pygame.font.Font(resource_path('Kenney Pixel.ttf'), 120)
 
-                pygame.draw.rect(game_window, (0, 0, 0), (WINDOW_WIDTH // 2 - text.get_width() // 2 - 5, 20 + text.get_height(), text.get_width() + 10, 20))
+                    text = font.render("GAME OVER", True, (255, 255, 255))
+                    game_window.blit(text, (WINDOW_WIDTH // 2- text.get_width() // 2, 20))
+
+                    pygame.draw.rect(game_window, (255, 255, 255), (WINDOW_WIDTH // 2 - text.get_width() // 2 - 5, 20 + text.get_height(), text.get_width() + 10, 20))
+
+                else:
+
+                    pass
          
                 window_resize()
 
