@@ -17,13 +17,16 @@ def distFinder(soundLoc: (int,int), playerLoc: (int,int)) -> float:
 def soundVolume(distance: float, primaryDir: Direction, muffling: int) -> (int,int):
     """Use this with "set_volume()"."""
     if primaryDir.value == "L":
-        voL = 2/(distance+muffling)
-        voR = 1/(distance+muffling)
+        print(f"l dist+muff = {distance+muffling}")
+        voL = 2/max((distance+muffling),1)
+        voR = 1/max((distance+muffling),1)
     elif primaryDir.value == "R":
-        voL = 1/(distance+muffling)
-        voR = 2/(distance+muffling)
+        print(f"r dist+muff = {distance+muffling}")
+        voL = 1/max((distance+muffling),1)
+        voR = 2/max((distance+muffling),1)
     else:
-        voL = voR = 1.5/(distance+muffling)
+        print(f"f/b dist+muff = {distance+muffling}")
+        voL = voR = 1.5/max((distance+muffling),1)
     return (voL, voR)
 
 def checkWalls(grid,soundLoc,playerLoc):
@@ -77,18 +80,18 @@ def findSoundDirection(playerLoc: (int,int), playerDirection: Direction, soundLo
         else:
             return Direction.FORWARD
     elif playerDirection == Direction.LEFT:
-        if yDif < 0:
+        if yDif > 0:
             return Direction.LEFT
-        elif yDif > 0:
+        elif yDif < 0:
             return Direction.RIGHT
         elif xDif >= 0:
             return Direction.FORWARD
         else:
             return Direction.BACKWARD
     else:
-        if yDif < 0:
+        if yDif > 0:
             return Direction.RIGHT
-        elif yDif > 0:
+        elif yDif < 0:
             return Direction.LEFT
         elif xDif >= 0:
             return Direction.BACKWARD
