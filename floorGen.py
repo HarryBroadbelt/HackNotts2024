@@ -82,9 +82,9 @@ class Floor:
         aStarPassed = False
             
         while not exitFound or not playerPlaced or not monsterPlaced or not aStarPassed:
-            MAX_SIZE = 20
-            MAX_TUNNELS = 60
-            MAX_LENGTH = 8
+            MAX_SIZE = 30
+            MAX_TUNNELS = 100
+            MAX_LENGTH = 10
             self.exit = [1, 0]
             self.playerSpawn = [0,1]
             self.monsterSpawn = [0,0]
@@ -103,7 +103,7 @@ class Floor:
 
             for i in range(MAX_TUNNELS):
                 tunnel_dir = random.choice([[0, 1], [1, 0], [0, -1], [-1, 0]])
-                self.grid[tunnel[0]][tunnel[1]] = "#"
+                self.grid[tunnel[0]][tunnel[1]] = " "
                 tunnel = [tunnel[0] + tunnel_dir[0], tunnel[1] + tunnel_dir[1]]
                 if tunnel[0] == 0:
                     tunnel[0] = 1
@@ -135,14 +135,20 @@ class Floor:
             for i in range(randI,MAX_SIZE):
                 for u in range(randU,MAX_SIZE):
                     if not exitFound:
-                        if self.grid[i][u] == " ":
+                        if self.grid[i][u] == "#":
                             surroundingWalls = 0
                             for offset in range(-1,2):
-                                if self.grid[i+offset][u] == "#":
-                                    surroundingWalls += 1
-                                if self.grid[i][u+offset] == "#":
-                                    surroundingWalls += 1
-                            if surroundingWalls == 3:
+                                try:
+                                    if self.grid[i+offset][u] == "#":
+                                        surroundingWalls += 1
+                                except IndexError:
+                                    pass
+                                try:
+                                    if self.grid[i][u+offset] == "#":
+                                        surroundingWalls += 1
+                                except IndexError:
+                                    pass
+                            if surroundingWalls == 5:
                                 self.exit = [i,u]
                                 exitFound = True
                     if self.grid[i][u] == " ":
@@ -176,13 +182,19 @@ class Floor:
                 for u in range(1,randU):
                     if not exitFound:
                         if self.grid[i][u] == "#":
+                            
                             surroundingWalls = 0
-                            for offset in range(-1,2):
+                            try:
                                 if self.grid[i+offset][u] == "#":
                                     surroundingWalls += 1
+                            except IndexError:
+                                pass
+                            try:
                                 if self.grid[i][u+offset] == "#":
                                     surroundingWalls += 1
-                            if surroundingWalls == 3:
+                            except IndexError:
+                                pass
+                            if surroundingWalls == 5:
                                 self.exit = [i,u]
                                 exitFound = True
                     if self.grid[i][u] == " ":
