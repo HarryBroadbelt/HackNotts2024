@@ -142,17 +142,17 @@ class Enemy():
                     rand_dir_x = random.randint(1,2)
                     rand_dir_y = random.randint(1,2)
                     if(rand_dir_x == 1 and rand_dir_y == 1):
-                        if(not(self.x + rand_x > len(grid) and self.y + rand_dir_y > len(grid))):
+                        if(not(self.x + rand_x >= len(grid) and self.y + rand_dir_y >= len(grid))):
                             self.x = self.x + rand_x
                             self.y = self.y + rand_y
                             break
                     elif(rand_dir_x == 1 and rand_dir_y == 2):
-                        if(not(self.x + rand_x > len(grid) and self.y - rand_dir_y < 0)):
+                        if(not(self.x + rand_x >= len(grid) and self.y - rand_dir_y < 0)):
                             self.x = self.x + rand_x
                             self.y = self.y - rand_y
                             break
                     elif(rand_dir_x == 2 and rand_dir_y == 1):
-                        if(not(self.x - rand_x < 0 and self.y + rand_dir_y > len(grid))):
+                        if(not(self.x - rand_x < 0 and self.y + rand_dir_y >= len(grid))):
                             self.x = self.x - rand_x
                             self.y = self.y + rand_y
                             break
