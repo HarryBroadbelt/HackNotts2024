@@ -330,6 +330,8 @@ def main():
             ## display
 
             game_window.fill((255, 255, 255))
+
+            """
             
             font = pygame.font.Font(resource_path('Kenney Pixel.ttf'), 150)
 
@@ -337,6 +339,10 @@ def main():
             game_window.blit(text, (WINDOW_WIDTH // 2- text.get_width() // 2, 20))
 
             pygame.draw.rect(game_window, (0, 0, 0), (WINDOW_WIDTH // 2 - text.get_width() // 2 - 5, 20 + text.get_height(), text.get_width() + 10, 20))
+
+            """
+
+            game_window.blit(logo, (WINDOW_WIDTH // 2 - logo.get_width() // 2, 20))
             
             font = pygame.font.Font(resource_path('Kenney Pixel.ttf'), 120)
 
@@ -450,15 +456,21 @@ def main():
                 ## NEW FRAME
 
                 if new_floor == True:
+
+                    valid_floor = False
+
+                    while valid_floor == False:
                     
-                    new_display = True
-                    new_floor = False
-                    cur_floor = Floor()
-                    player = Player(cur_floor.playerSpawn)
-                    en_typ = random.choice(en_types)
-                    #en_typ = "Chaser"
-                    enemy = Enemy(velocity = 0, x = cur_floor.monsterSpawn[0], y = cur_floor.monsterSpawn[1], type = en_typ, art = en_art[en_typ])
-                    already_spotted = False
+                        new_display = True
+                        new_floor = False
+                        cur_floor = Floor()
+                        if cur_floor.grid[cur_floor.exit[0]][cur_floor.exit[1]] != " ":
+                            valid_floor = True
+                            player = Player(cur_floor.playerSpawn)
+                            en_typ = random.choice(en_types)
+                            #en_typ = "Chaser"
+                            enemy = Enemy(velocity = 0, x = cur_floor.monsterSpawn[0], y = cur_floor.monsterSpawn[1], type = en_typ, art = en_art[en_typ])
+                            already_spotted = False
 
                     print(player.loc)
 
@@ -572,7 +584,7 @@ def main():
                             l_v, r_v = soundVolume(sound_dist, sound_dir, sound_muffle)
 
                             spot_channel.play(en_sounds[enemy.type]["Spot"])
-                            spot_channel.set_volume(l_v, r_v)
+                            spot_channel.set_volume(l_v*2, r_v*2)
                             
                         elif enemy.noticed == False and enemy.current_aggro == enemy.attributes["min_aggro"]:
                             already_spotted = False
@@ -624,27 +636,33 @@ def main():
 
         while game_state == "GAME OVER":
 
-            clock.tick(FRAMERATE)
+            go_frame = 0
+            exit_go = False
 
-            game_window.fill((255, 255, 255))
-            
-            font = pygame.font.Font(resource_path('Kenney Pixel.ttf'), 120)
+            while exit_go == False:
 
-            text = font.render("GAME OVER", True, (0, 0, 0))
-            game_window.blit(text, (WINDOW_WIDTH // 2- text.get_width() // 2, 20))
+                clock.tick(FRAMERATE)
 
-            pygame.draw.rect(game_window, (0, 0, 0), (WINDOW_WIDTH // 2 - text.get_width() // 2 - 5, 20 + text.get_height(), text.get_width() + 10, 20))
-     
-            window_resize()
+                game_window.fill((255, 255, 255))
+                
+                font = pygame.font.Font(resource_path('Kenney Pixel.ttf'), 120)
 
-            events = global_inputs()
-            
-            for event in events:
-                if event.type == pygame.KEYDOWN:
-                                    
-                    if event.key == pygame.K_SPACE or event.key == pygame.K_RETURN:
-                        game_state = "MAIN MENU"
-                        log(("new game state: " + game_state))
+                text = font.render("GAME OVER", True, (0, 0, 0))
+                game_window.blit(text, (WINDOW_WIDTH // 2- text.get_width() // 2, 20))
+
+                pygame.draw.rect(game_window, (0, 0, 0), (WINDOW_WIDTH // 2 - text.get_width() // 2 - 5, 20 + text.get_height(), text.get_width() + 10, 20))
+         
+                window_resize()
+
+                events = global_inputs()
+                
+                for event in events:
+                    if event.type == pygame.KEYDOWN:
+                                        
+                        if (event.key == pygame.K_SPACE or event.key == pygame.K_RETURN) and go_frame > 5:
+                            game_state = "MAIN MENU"
+                            exit_go = True
+                            log(("new game state: " + game_state))
 
 def temp_display(player, cur_floor, enemy):
     for x in range(0, len(cur_floor.grid)):
@@ -1166,6 +1184,7 @@ FRAMERATE = 60
 if DEV_VER == "DEV":
     console_data["FPS"] = True
     
+logo = pygame.image.load(resource_path("Blind Man's Dungeon.png"))
 qr_code = pygame.image.load(resource_path("QR.png"))
 test_img = pygame.image.load(resource_path("test.png"))
 
@@ -1174,7 +1193,7 @@ arts = {}
 for art in art_list:
     arts[art] = pygame.image.load((art + ".png"))
 
-en_types = ["Meaty Michael", "Chaser", "Phased"]
+en_types = ["Meaty Michael", "Chaser", "Phased", "Stalker"]
 
 en_art = {"Meaty Michael": pygame.image.load("En1.png"),
           "Chaser": pygame.image.load("En2.png"),
