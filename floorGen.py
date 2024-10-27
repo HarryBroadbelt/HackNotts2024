@@ -18,8 +18,8 @@ def calcHeuristic(row, col, floor):
 def isValid(row,col):
     return (row>=0) and (row<30) and (col>=0) and (col<30)
 
-def unblocked(grid,row,col):
-    return grid[row][col] == " "
+def unblocked(grid,row,col,floor):
+    return grid[row][col] == " " or (row,col) == floor.exit
 
 def tracePath(nodeDetails, floor):
     path = []
@@ -35,6 +35,7 @@ def tracePath(nodeDetails, floor):
     print(path)
 
 def aStarAlgo(start,end,floor):
+    
     closedList = [[False for _ in range(30)] for _ in range(30)]
     nodeDetails = [[Node() for _ in range(30)] for _ in range(30)]
     nodeDetails[start[0]][start[1]].f = 0
@@ -53,7 +54,7 @@ def aStarAlgo(start,end,floor):
         for dir in directions:
             newI = i + dir[0]
             newJ = j+dir[1]
-            if isValid(newI,newJ) and unblocked(floor.grid,newI,newJ) and not closedList[newI][newJ]:
+            if isValid(newI,newJ) and unblocked(floor.grid,newI,newJ, floor) and not closedList[newI][newJ]:
                 if isDest(newI, newJ, floor):
                     nodeDetails[newI][newJ].parent=(i,j)
                     #print("found path")
@@ -71,9 +72,49 @@ def aStarAlgo(start,end,floor):
                         nodeDetails[newI][newJ].h=hNew
                         nodeDetails[newI][newJ].parent=(i,j)
     return False
-    
-class Floor:
 
+def findExit(floor,i,u):
+    if floor.grid[i][u] == "#":
+        """
+        for offset in range(-1,2): 
+            surroundingWalls = 0
+            try:
+                if floor.grid[i+offset][u] == "#":
+                    surroundingWalls += 1
+            except IndexError:
+                pass
+            try:
+                if floor.grid[i][u+offset] == "#":
+                    surroundingWalls += 1
+            except IndexError:
+                pass
+        if surroundingWalls == 5:
+            floor.exit = [i,u]
+            return True
+        """
+        for offset in range(-1,2):
+            try:
+                if floor.grid[i+offset][u] == " ":
+                    return True
+            except IndexError:
+                pass
+            try:
+                if floor.grid[i][u+offset] == " ":
+                    return True
+            except IndexError:
+                pass
+        """
+        try:
+            if floor.grid[i+1][u] == " " or floor.grid[i-1][u] == " " or floor.grid[i][u+1] == " " or floor.grid[i][u-1] == " ":
+                floor.exit = (i,u)
+        except IndexError:
+            print(i,u)
+            pass
+        """
+    return False
+
+
+class Floor:
     def __init__(self):
 
         exitFound = False
@@ -135,22 +176,8 @@ class Floor:
             for i in range(randI,MAX_SIZE):
                 for u in range(randU,MAX_SIZE):
                     if not exitFound:
-                        if self.grid[i][u] == "#":
-                            surroundingWalls = 0
-                            for offset in range(-1,2):
-                                try:
-                                    if self.grid[i+offset][u] == "#":
-                                        surroundingWalls += 1
-                                except IndexError:
-                                    pass
-                                try:
-                                    if self.grid[i][u+offset] == "#":
-                                        surroundingWalls += 1
-                                except IndexError:
-                                    pass
-                            if surroundingWalls == 5:
-                                self.exit = [i,u]
-                                exitFound = True
+                        exitFound = findExit(self,i,u)
+                        print(exitFound)
                     if self.grid[i][u] == " ":
                         try:
                             if self.grid[i][u+1] == " " or self.grid[i][u-1] == " ":
@@ -181,22 +208,8 @@ class Floor:
             for i in range(1,randI):
                 for u in range(1,randU):
                     if not exitFound:
-                        if self.grid[i][u] == "#":
-                            for offset in range(-1,2): 
-                                surroundingWalls = 0
-                                try:
-                                    if self.grid[i+offset][u] == "#":
-                                        surroundingWalls += 1
-                                except IndexError:
-                                    pass
-                                try:
-                                    if self.grid[i][u+offset] == "#":
-                                        surroundingWalls += 1
-                                except IndexError:
-                                    pass
-                            if surroundingWalls == 5:
-                                self.exit = [i,u]
-                                exitFound = True
+                        exitFound = findExit(self,i,u)
+                        print(exitFound)
                     if self.grid[i][u] == " ":
                         try:
                             if self.grid[i][u+1] == " " or self.grid[i][u-1] == " ":
@@ -232,6 +245,8 @@ class Floor:
             playerExit = aStarAlgo(self.playerSpawn,self.exit,self)
             monsterExit = aStarAlgo(self.monsterSpawn,self.exit,self)
             aStarPassed = playerExit and monsterExit
+            print(f"pEx:{playerExit}")
+            print(f"mEx:{monsterExit}")
                         
                             
         
