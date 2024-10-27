@@ -16,7 +16,7 @@ class Enemy():
     def __init__(self, velocity, x, y, type, art):
         self.art = art
         print('shimmy yeah shimmy yeah shimmy yah')
-        #type = 'Stalker'
+        type = 'Stalker'
         if(type == 'Chaser'):
             max_aggro = 10
         elif(type == 'Stalker'):
