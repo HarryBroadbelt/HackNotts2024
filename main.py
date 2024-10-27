@@ -297,7 +297,7 @@ class Floor:
  # commented out as it's unecessary
 ### MAIN FUNCTION
 
-def main():
+def main(game_window):
 
     options = ["START", "TUTORIAL"]
 
@@ -468,7 +468,7 @@ def main():
                             valid_floor = True
                             player = Player(cur_floor.playerSpawn)
                             en_typ = random.choice(en_types)
-                            #en_typ = "Chaser"
+                            en_typ = "Stalker"
                             enemy = Enemy(velocity = 0, x = cur_floor.monsterSpawn[0], y = cur_floor.monsterSpawn[1], type = en_typ, art = en_art[en_typ])
                             already_spotted = False
 
@@ -642,11 +642,17 @@ def main():
             go_frame = 0
             exit_go = False
 
+            real_display(player, cur_floor, enemy, floors_cleared)
+            ani_bg = game_window.copy()
+
+            spot_channel.play(en_sounds[enemy.type]["Spot"])
+            spot_channel.set_volume(1)
+                        
             while exit_go == False:
 
                 clock.tick(FRAMERATE)
 
-                if go_frame > 5:
+                if go_frame > 8:
 
                     game_window.fill((40, 20, 20))
                     
@@ -659,7 +665,13 @@ def main():
 
                 else:
 
-                    pass
+                    go_frame += 1
+
+                    game_window.blit(ani_bg, (0, 0))
+                    
+                    the_art = enemy.art
+                    the_art = pygame.transform.scale(the_art, (go_frame * 160, go_frame * 160))
+                    game_window.blit(the_art, (WINDOW_WIDTH // 2 - the_art.get_width() // 2, WINDOW_HEIGHT // 2 - the_art.get_height() // 2))
          
                 window_resize()
 
@@ -698,7 +710,7 @@ def temp_display(player, cur_floor, enemy):
     if player.dir == "R":
         pygame.draw.rect(game_window, (0, 0, 0), (player.loc[0] * 30 + 5 + 5, player.loc[1]*30 + 5 + 5, 20, 10))
 
-def real_display(player, cur_floor, enemy, floor_num = 0):
+def real_display(player, cur_floor, enemy, floor_num = 0, no_enemy = False):
     #print(random.randint(0, 100))
     pygame.draw.rect(game_window, (154, 154, 154), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT // 2))
     pygame.draw.rect(game_window, (158, 159, 125), (0, WINDOW_HEIGHT // 2, WINDOW_WIDTH, WINDOW_HEIGHT // 2))
@@ -1171,6 +1183,7 @@ pygame.init()
 # Create a game window
 true_window = pygame.display.set_mode((960, 720), pygame.RESIZABLE)
 game_window = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
+
 # Set title
 pygame.display.set_caption("Nario and Kuigi")
 # PyGame Clock
@@ -1217,5 +1230,5 @@ en_sounds = {"Meaty Michael": {"Move": pygame.mixer.Sound("En1M.wav"),
                         "Spot": pygame.mixer.Sound("En3S.ogg")},
              "Stalker": {"Move": pygame.mixer.Sound("En4M.wav"),
                         "Spot": pygame.mixer.Sound("En4S.ogg")}}
-            
-main()
+
+main(game_window)
