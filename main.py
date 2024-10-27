@@ -534,7 +534,7 @@ def main():
 
                     # enemy mov
 
-                    if en_mov_timer == 0 and False:
+                    if en_mov_timer == 0:
 
                         en_mov_timer = FRAMERATE
 
