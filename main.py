@@ -342,7 +342,17 @@ def main(game_window):
 
             """
 
+            if sel == 0:
+
+                game_window.blit(menu_0, (0, 0))
+
+            if sel == 1:
+
+                game_window.blit(menu_1, (0, 0))
+
             game_window.blit(logo, (WINDOW_WIDTH // 2 - logo.get_width() // 2, 20))
+
+            """
             
             font = pygame.font.Font(resource_path('Kenney Pixel.ttf'), 120)
 
@@ -353,12 +363,12 @@ def main(game_window):
                     tet = "> " + tet
 
                 text = font.render(tet, True, (0, 0, 0))
-                game_window.blit(text, (WINDOW_WIDTH // 2 - text.get_width() // 2, 350 + (i * 90) - text.get_height() // 2))
+                game_window.blit(text, (WINDOW_WIDTH // 2 - text.get_width() // 2, 350 + (i * 90) - text.get_height() // 2))"""
             
             font = pygame.font.Font(resource_path('Kenney Pixel.ttf'), 80)
 
             text = font.render((PLAT_VER + " v." + DEV_VER), True, (0, 0, 0))
-            game_window.blit(text, (WINDOW_WIDTH - text.get_width() - 10, WINDOW_HEIGHT - text.get_height() - 10))
+            game_window.blit(text, (WINDOW_WIDTH - text.get_width() - 10, WINDOW_HEIGHT - text.get_height() - 50))
 
             window_resize()
 
@@ -572,7 +582,7 @@ def main(game_window):
 
                         en_mov_timer = FRAMERATE
                         if enemy.current_aggro >= 6:
-                            en_mov_timer = FRAMERATE // 2
+                            en_mov_timer = FRAMERATE // 3
                         
                         if enemy.type == 'Spectre':
                             en_mov_timer = FRAMERATE // 2
@@ -1191,7 +1201,7 @@ true_window = pygame.display.set_mode((960, 720), pygame.RESIZABLE)
 game_window = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
 
 # Set title
-pygame.display.set_caption("Nario and Kuigi")
+pygame.display.set_caption("Blind Man's Dungeon Rift")
 # PyGame Clock
 clock = pygame.time.Clock()
 # Blank Window
@@ -1213,6 +1223,12 @@ if DEV_VER == "DEV":
     console_data["FPS"] = True
     
 logo = pygame.image.load(resource_path("Blind Man's Dungeon.png"))
+menu = pygame.image.load(resource_path("Menu.png"))
+menu_0 = pygame.image.load(resource_path("Menu0.png"))
+menu_1 = pygame.image.load(resource_path("Menu1.png"))
+menu = pygame.transform.scale(menu, (960, 720))
+menu_1 = pygame.transform.scale(menu_1, (960, 720))
+menu_0 = pygame.transform.scale(menu_0, (960, 720))
 qr_code = pygame.image.load(resource_path("QR.png"))
 test_img = pygame.image.load(resource_path("test.png"))
 
@@ -1221,7 +1237,7 @@ arts = {}
 for art in art_list:
     arts[art] = pygame.image.load((art + ".png"))
 
-en_types = ["Meaty Michael", "Chaser", "Phased", "Stalker"]
+en_types = ["Meaty Michael", "Chaser", "Phased", "Stalker", "Spectre"]
 
 en_art = {"Meaty Michael": pygame.image.load("En1.png"),
           "Chaser": pygame.image.load("En2.png"),
