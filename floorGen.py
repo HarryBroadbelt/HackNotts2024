@@ -249,6 +249,8 @@ class Floor:
             aStarPassed = playerExit and monsterExit
             print(f"pEx:{playerExit}")
             print(f"mEx:{monsterExit}")
+
+            self.exit = [self.exit[0], self.exit[1]]
                         
                             
         

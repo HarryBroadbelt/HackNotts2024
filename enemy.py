@@ -15,7 +15,6 @@ class Enemy():
     def __init__(self, velocity, x, y, type, art):
         self.art = art
         print('shimmy yeah shimmy yeah shimmy yah')
-        type = 'Stalker'
         if(type == 'Chaser'):
             max_aggro = 10
         elif(type == 'Stalker'):
@@ -106,10 +105,6 @@ class Enemy():
                     break
                 break
             enemy_position = [self.x, self.y]
-        elif(self.type == 'Stalker'):
-            #enemy_position=self.move_towards_player(grid,1,player_location)
-            #print('needs fixing.')
-            pass
         elif(self.noticed):
             if(self.type != 'Meaty Michael'):
                 enemy_position=self.move_towards_player(grid,1,player_location)
