@@ -239,7 +239,7 @@ class Player:
             self.loc = copy.deepcopy(cur_loc)
         else:
             self.audioChannel.play(self.footstepSound)
-
+"""
 class Floor:
 
     def __init__(self):
@@ -292,7 +292,8 @@ class Floor:
                         tunnel[1] = MAX_SIZE - 2
 
         print(self.grid)
-
+"""
+ # commented out as it's unecessary
 ### MAIN FUNCTION
 
 def main():
