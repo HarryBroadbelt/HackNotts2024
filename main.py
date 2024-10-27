@@ -3,6 +3,7 @@ import random, copy, pygame, sys, os, math, time, asyncio
 from enemy import Enemy
 from imageBlur import blurScreen
 from sounds import findSoundDirection, checkWalls, soundVolume, distFinder, Direction
+from floorGen import Floor
 
 ### TEMPLATE FUNCTIONS
 
@@ -169,6 +170,8 @@ class Player:
         #self.dir = random.choice(["U", "D", "L", "R"])
         self.dir = "U"
         self.new_floor = False
+        self.footstepSound = pygame.mixer.Sound("playerFootstep.ogg")
+        self.audioChannel = pygame.mixer.Channel(2)
 
     def turn_left(self):
         if self.dir == "U":
@@ -234,6 +237,8 @@ class Player:
                 
         if grid[self.loc[0]][self.loc[1]] == "#":
             self.loc = copy.deepcopy(cur_loc)
+        else:
+            self.audioChannel.play(self.footstepSound)
 
 class Floor:
 
