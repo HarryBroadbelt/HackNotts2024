@@ -1086,7 +1086,7 @@ def real_display(player, cur_floor, enemy, floor_num = 0, no_enemy = False):
             if enemy.x == n_loc[0] and enemy.y == n_loc[1]:
                 the_art = enemy.art
                 the_art = pygame.transform.scale(the_art, (640, 640))
-                game_window.blit(the_art, (WINDOW_WIDTH // 2 - 320 - 640, WINDOW_HEIGHT // 2 - 320))
+                game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160 - 640, WINDOW_HEIGHT // 2 - 320))
     except:
         pass
 
@@ -1119,7 +1119,7 @@ def real_display(player, cur_floor, enemy, floor_num = 0, no_enemy = False):
             if enemy.x == n_loc[0] and enemy.y == n_loc[1]:
                 the_art = enemy.art
                 the_art = pygame.transform.scale(the_art, (640, 640))
-                game_window.blit(the_art, (WINDOW_WIDTH // 2 + 320, WINDOW_HEIGHT // 2 - 320))
+                game_window.blit(the_art, (WINDOW_WIDTH // 2 + 160, WINDOW_HEIGHT // 2 - 320))
             
     except:
         pass
