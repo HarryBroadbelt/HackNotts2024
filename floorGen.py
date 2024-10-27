@@ -82,7 +82,7 @@ class Floor:
         aStarPassed = False
             
         while not exitFound or not playerPlaced or not monsterPlaced or not aStarPassed:
-            MAX_SIZE = 20
+            MAX_SIZE = 15
             MAX_TUNNELS = 60
             MAX_LENGTH = 8
             self.exit = [1, 0]

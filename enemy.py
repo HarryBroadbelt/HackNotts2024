@@ -8,6 +8,7 @@ ENEMY TYPES:
 - Meaty Michael: Stops moving if it sees the player
 - Phased: Moves randomly but can move through walls at a greatly reduced rate
 
+
 """
 
 
@@ -15,7 +16,7 @@ class Enemy():
     def __init__(self, velocity, x, y, type, art):
         self.art = art
         print('shimmy yeah shimmy yeah shimmy yah')
-        #type = 'Stalker'
+        type = 'Chaser'
         if(type == 'Chaser'):
             max_aggro = 10
         elif(type == 'Stalker'):
@@ -24,6 +25,7 @@ class Enemy():
             max_aggro = 3
         elif(type=='Phased'):
             max_aggro = 6
+        
         self.velocity=velocity
         self.x=x
         self.y=y
