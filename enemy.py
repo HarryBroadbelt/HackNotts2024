@@ -88,9 +88,9 @@ class Enemy():
     def ai_process(self, grid, player_location):
         enemy_position = [self.x, self.y]
         if(self.type == 'Phased'):
-            rng = random.randint(1,8)
+            rng = random.randint(1,5)
             while(1):
-                if(rng == 1 and self.x+1 < len(grid)):
+                if(rng == 1 and self.x+1 < len(grid) - 1):
                     self.x = self.x + 1
                     self.y = self.y
                     break
@@ -98,7 +98,7 @@ class Enemy():
                     self.x = self.x - 1
                     self.y = self.y
                     break
-                elif(rng == 3 and self.y+1 < len(grid)):
+                elif(rng == 3 and self.y+1 < len(grid) - 1):
                     self.x = self.x
                     self.y = self.y + 1
                     break
@@ -118,7 +118,7 @@ class Enemy():
             if(type == 'Chaser' and (enemy_position != last_seen)):
                 enemy_position = self.move_towards_player(grid,1,last_seen)
                 return enemy_position
-            rng = random.randint(1,8)
+            rng = random.randint(1,5)
             while(1):
                 if(rng == 1 and grid[self.x+1][self.y] != '#'):
                     self.x = self.x + 1

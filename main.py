@@ -468,7 +468,7 @@ def main(game_window):
                             valid_floor = True
                             player = Player(cur_floor.playerSpawn)
                             en_typ = random.choice(en_types)
-                            en_typ = "Stalker"
+                            en_typ = "Spectre"
                             enemy = Enemy(velocity = 0, x = cur_floor.monsterSpawn[0], y = cur_floor.monsterSpawn[1], type = en_typ, art = en_art[en_typ])
                             already_spotted = False
 
@@ -575,10 +575,9 @@ def main(game_window):
                             en_mov_timer = FRAMERATE // 2
                         
                         if enemy.type == 'Spectre':
-                            en_move_timer = FRAMERATE // 2
+                            en_mov_timer = FRAMERATE // 2
 
                         if enemy.noticed == True and already_spotted == False:
-                            print("yeah")
                             already_spotted = True
 
                             sound_dir = findSoundDirection(player.loc, player.dir, copy.deepcopy(en_loc))
@@ -629,7 +628,7 @@ def main(game_window):
                                         [player.loc[0] + base_change[0] + r_change[0], player.loc[1] + base_change[1] + r_change[1]],
                                         [player.loc[0] + base_change[0], player.loc[1] + base_change[1]]]
                                 
-                            if en_loc in dis_locs:
+                            if en_loc in dis_locs or dis_type == "FAKE":
                                 new_display = True
 
                     if enemy.x == player.loc[0] and enemy.y == player.loc[1]: # player caught
@@ -1220,7 +1219,8 @@ en_types = ["Meaty Michael", "Chaser", "Phased", "Stalker"]
 en_art = {"Meaty Michael": pygame.image.load("En1.png"),
           "Chaser": pygame.image.load("En2.png"),
           "Phased": pygame.image.load("En3.png"),
-          "Stalker": pygame.image.load("En4.png")}
+          "Stalker": pygame.image.load("En4.png"),
+          "Spectre": pygame.image.load("En5.png")}
 
 en_sounds = {"Meaty Michael": {"Move": pygame.mixer.Sound("En1M.wav"),
                                "Spot": pygame.mixer.Sound("En1S.ogg")},
@@ -1229,6 +1229,8 @@ en_sounds = {"Meaty Michael": {"Move": pygame.mixer.Sound("En1M.wav"),
              "Phased": {"Move": pygame.mixer.Sound("En3M.wav"),
                         "Spot": pygame.mixer.Sound("En3S.ogg")},
              "Stalker": {"Move": pygame.mixer.Sound("En4M.wav"),
-                        "Spot": pygame.mixer.Sound("En4S.ogg")}}
+                        "Spot": pygame.mixer.Sound("En4S.ogg")},
+             "Spectre": {"Move": pygame.mixer.Sound("En5M.wav"),
+                        "Spot": pygame.mixer.Sound("En5S.ogg")}}
 
 main(game_window)
