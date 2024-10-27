@@ -18,15 +18,15 @@ def soundVolume(distance: float, primaryDir: Direction, muffling: int) -> (int,i
     """Use this with "set_volume()"."""
     if primaryDir.value == "L":
         print(f"l dist+muff = {distance+muffling}")
-        voL = 2/max((distance+muffling),1)
-        voR = 1/max((distance+muffling),1)
+        voL = 1/max((distance+muffling),1)
+        voR = .5/max((distance+muffling),1)
     elif primaryDir.value == "R":
         print(f"r dist+muff = {distance+muffling}")
-        voL = 1/max((distance+muffling),1)
-        voR = 2/max((distance+muffling),1)
+        voL = .5/max((distance+muffling),1)
+        voR = 1/max((distance+muffling),1)
     else:
         print(f"f/b dist+muff = {distance+muffling}")
-        voL = voR = 1.5/max((distance+muffling),1)
+        voL = voR = .75/max((distance+muffling),1)
     return (voL, voR)
 
 def checkWalls(grid,soundLoc,playerLoc):
