@@ -108,7 +108,8 @@ class Enemy():
             enemy_position = [self.x, self.y]
         elif(self.type == 'Stalker'):
             #enemy_position=self.move_towards_player(grid,1,player_location)
-            print('needs fixing.')
+            #print('needs fixing.')
+            pass
         elif(self.noticed):
             if(self.type != 'Meaty Michael'):
                 enemy_position=self.move_towards_player(grid,1,player_location)
