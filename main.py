@@ -555,20 +555,42 @@ def main():
                         if ox != en_loc[0] or oy != en_loc[1]:
                             enemy.x = en_loc[0]
                             enemy.y = en_loc[1]
-                            
-                            new_display = True
 
                             sound_dir = findSoundDirection(player.loc, player.dir, copy.deepcopy(en_loc))
                             sound_muffle = checkWalls(cur_floor.grid, copy.deepcopy(en_loc), player.loc)
                             sound_dist = math.dist(copy.deepcopy(en_loc), player.loc)
-                            print(sound_dir, sound_muffle, sound_dist)
                             l_v, r_v = soundVolume(sound_dist, sound_dir, sound_muffle)
-
-                            print(l_v, r_v)
 
                             sound_channel.play(en_sounds[enemy.type]["Move"])
                             sound_channel.set_volume(l_v, r_v)
-                            
+
+                            if player.dir == "U":
+                                base_change = [0, -1]
+                                l_change = [-1, 0]
+                                r_change = [1, 0]
+                            if player.dir == "D":
+                                base_change = [0, 1]
+                                l_change = [1, 0]
+                                r_change = [-1, 0]
+                            if player.dir == "L":
+                                base_change = [-1, 0]
+                                l_change = [0, 1]
+                                r_change = [0, -1]
+                            if player.dir == "R":
+                                base_change = [1, 0]
+                                l_change = [0, -1]
+                                r_change = [0, 1]
+
+                            dis_locs = [[player.loc[0] + base_change[0]*3, player.loc[1] + base_change[1]*3],
+                                        [player.loc[0] + base_change[0]*2 + r_change[0], player.loc[1] + base_change[1]*2 + r_change[1]],
+                                        [player.loc[0] + base_change[0]*2 + l_change[0], player.loc[1] + base_change[1]*2 + l_change[1]],
+                                        [player.loc[0] + base_change[0]*2, player.loc[1] + base_change[1]*2],
+                                        [player.loc[0] + base_change[0] + l_change[0], player.loc[1] + base_change[1] + l_change[1]],
+                                        [player.loc[0] + base_change[0] + r_change[0], player.loc[1] + base_change[1] + r_change[1]],
+                                        [player.loc[0] + base_change[0], player.loc[1] + base_change[1]]]
+                                
+                            if en_loc in dis_locs:
+                                new_display = True
 
                     if enemy.x == player.loc[0] and enemy.y == player.loc[1]: # player caught
                         game_over = True
@@ -606,6 +628,8 @@ def temp_display(player, cur_floor, enemy):
                 pygame.draw.rect(game_window, (0, 0, 0), (x*40, y*40, 40, 40))
             elif cur_floor.grid[x][y] == " ":
                 pygame.draw.rect(game_window, (255, 255, 255), (x*40, y*40, 40, 40))
+
+    print(cur_floor.exit, player.loc)
 
     pygame.draw.rect(game_window, (255, 255, 255), (cur_floor.exit[0]*40 + 10, cur_floor.exit[1]*40 + 10, 20, 20))
 
