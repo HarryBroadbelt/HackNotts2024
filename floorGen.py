@@ -182,18 +182,18 @@ class Floor:
                 for u in range(1,randU):
                     if not exitFound:
                         if self.grid[i][u] == "#":
-                            
-                            surroundingWalls = 0
-                            try:
-                                if self.grid[i+offset][u] == "#":
-                                    surroundingWalls += 1
-                            except IndexError:
-                                pass
-                            try:
-                                if self.grid[i][u+offset] == "#":
-                                    surroundingWalls += 1
-                            except IndexError:
-                                pass
+                            for offset in range(-1,2): 
+                                surroundingWalls = 0
+                                try:
+                                    if self.grid[i+offset][u] == "#":
+                                        surroundingWalls += 1
+                                except IndexError:
+                                    pass
+                                try:
+                                    if self.grid[i][u+offset] == "#":
+                                        surroundingWalls += 1
+                                except IndexError:
+                                    pass
                             if surroundingWalls == 5:
                                 self.exit = [i,u]
                                 exitFound = True
