@@ -75,9 +75,7 @@ class Floor:
 
         LV_GEN = "rand"
 
-        self.exit = [1, 0]
-        self.playerSpawn = [0,1]
-        self.monsterSpawn = [0,0]
+        
         exitFound = False
         playerPlaced = False
         monsterPlaced = False
@@ -90,6 +88,9 @@ class Floor:
                 MAX_SIZE = 30
                 MAX_TUNNELS = 50
                 MAX_LENGTH = 15
+                self.exit = [1, 0]
+                self.playerSpawn = [0,1]
+                self.monsterSpawn = [0,0]
                 exitFound = False
                 playerPlaced = False
                 monsterPlaced = False
