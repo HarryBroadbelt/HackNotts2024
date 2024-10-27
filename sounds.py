@@ -28,20 +28,29 @@ def soundVolume(distance: float, primaryDir: Direction, muffling: int) -> (int,i
 
 def checkWalls(grid,soundLoc,playerLoc):
     muffling = 0
-    if abs(soundLoc[0]-playerLoc[0]) > abs(soundLoc[1]-playerLoc[1]):
-        if soundLoc[0]-playerLoc[0] < 0:
-            if grid[soundLoc[0]+1][soundLoc[1]] == "#":
-                muffling += 1
+    atPlayer = False
+    while not atPlayer:
+        if abs(soundLoc[0]-playerLoc[0]) > abs(soundLoc[1]-playerLoc[1]):
+            if soundLoc[0]-playerLoc[0] < 0:
+                if grid[soundLoc[0]+1][soundLoc[1]] == "#":
+                    muffling += 1
+                soundLoc[0]+=1
+            else:
+                if grid[soundLoc[0]-1][soundLoc[1]] == "#":
+                    muffling += 1
+                soundLoc[0]-=1
+        elif abs(soundLoc[0]-playerLoc[0]) < abs(soundLoc[1]-playerLoc[1]):
+            if soundLoc[1]-playerLoc[1] < 0:
+                if grid[soundLoc[0]][soundLoc[1]+1] == "#":
+                    muffling += 1
+                soundLoc[1]+=1
+            else:
+                if grid[soundLoc[0]][soundLoc[1]-1] == "#":
+                    muffling += 1
+                soundLoc[1]-=1
         else:
-            if grid[soundLoc[0]-1][soundLoc[1]] == "#":
-                muffling += 1
-    else:
-        if soundLoc[1]-playerLoc[1] < 0:
-            if grid[soundLoc[0]][soundLoc[1]+1] == "#":
-                muffling += 1
-        else:
-            if grid[soundLoc[0]][soundLoc[1]-1] == "#":
-                muffling += 1
+            atPlayer = True
+        
         
 
 def findSoundDirection(playerLoc: (int,int), playerDirection: Direction, soundLoc: (int, int)) -> Direction:
