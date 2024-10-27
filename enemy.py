@@ -159,7 +159,7 @@ class Enemy():
                             self.x = self.x - rand_x
                             self.y = self.y - rand_y
                             break
-                    break
+                break
                 
             enemy_position = [self.x, self.y]
             
