@@ -15,6 +15,7 @@ class Enemy():
     def __init__(self, velocity, x, y, type, art):
         self.art = art
         print('shimmy yeah shimmy yeah shimmy yah')
+        print(type)
         if(type == 'Chaser'):
             max_aggro = 10
         elif(type == 'Stalker'):
@@ -110,7 +111,11 @@ class Enemy():
                 enemy_position=self.move_towards_player(grid,1,player_location)
             else:
                 enemy_position = [self.x, self.y]
+            last_seen = player_location
         else:
+            if(type == 'Chaser' and (enemy_position != last_seen)):
+                enemy_position = self.move_towards_player(grid,1,last_seen)
+                return enemy_position
             rng = random.randint(1,8)
             while(1):
                 if(rng == 1 and grid[self.x+1][self.y] != '#'):
@@ -154,6 +159,7 @@ class Enemy():
                             self.x = self.x - rand_x
                             self.y = self.y - rand_y
                             break
+                    break
                 
             enemy_position = [self.x, self.y]
             
