@@ -125,9 +125,9 @@ class Floor:
         aStarPassed = False
             
         while not exitFound or not playerPlaced or not monsterPlaced or not aStarPassed:
-            MAX_SIZE = 30
-            MAX_TUNNELS = 100
-            MAX_LENGTH = 10
+            MAX_SIZE = 20
+            MAX_TUNNELS = 60
+            MAX_LENGTH = 8
             self.exit = [1, 0]
             self.playerSpawn = [0,1]
             self.monsterSpawn = [0,0]
@@ -202,7 +202,7 @@ class Floor:
                         except IndexError:
                             pass
                     if exitFound and self.grid[i][u] == " " and not playerPlaced:
-                        if maths.sqrt((i-self.exit[0])**2+(u-self.exit[1])**2) >= 12:
+                        if maths.sqrt((i-self.exit[0])**2+(u-self.exit[1])**2) >= 6:
                             self.playerSpawn = [i,u]
                             playerPlaced = True
 
@@ -240,7 +240,7 @@ class Floor:
             crazyList = []
             for i in range(1,MAX_SIZE):
                 for u in range(1,MAX_SIZE):
-                    if self.grid[i][u] == " " and (i,u) != self.exit and (i,u) != self.playerSpawn and maths.sqrt((i-self.playerSpawn[0])**2+(u-self.playerSpawn[1])**2) >= 12:
+                    if self.grid[i][u] == " " and (i,u) != self.exit and (i,u) != self.playerSpawn and maths.sqrt((i-self.playerSpawn[0])**2+(u-self.playerSpawn[1])**2) >= 6:
                         crazyList.append((i,u))
             self.monsterSpawn = random.choice(crazyList)
             monsterPlaced = True
@@ -249,13 +249,15 @@ class Floor:
             aStarPassed = playerExit and monsterExit
             print(f"pEx:{playerExit}")
             print(f"mEx:{monsterExit}")
+
+            self.exit = [self.exit[0], self.exit[1]]
                         
                             
         
         #print(self.grid)
 if __name__ == "__main__":
     floor = Floor()
-    for i in range(30):
+    for i in range(len(floor.grid)):
         print(floor.grid[i])
     print(floor.playerSpawn)
     print(floor.exit)
