@@ -1203,8 +1203,8 @@ def real_display(player, cur_floor, enemy, floor_num = 0, no_enemy = False):
         game_window.blit(surfaces[0], (WINDOW_WIDTH // 3, WINDOW_HEIGHT // 3))
 
         brightness = 128 + floor_num * 16
-        if brightness > 224:
-            brightness = 224
+        if brightness > 204:
+            brightness = 204
 
         draw_trans_rect(game_window, (0,0,0), (brightness), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT))
 
