@@ -655,12 +655,19 @@ def main(game_window):
 
                     game_window.fill((40, 20, 20))
                     
-                    font = pygame.font.Font(resource_path('Kenney Pixel.ttf'), 120)
+                    font = pygame.font.Font(resource_path('Kenney Pixel.ttf'), 150)
 
                     text = font.render("GAME OVER", True, (255, 255, 255))
                     game_window.blit(text, (WINDOW_WIDTH // 2- text.get_width() // 2, 20))
 
                     pygame.draw.rect(game_window, (255, 255, 255), (WINDOW_WIDTH // 2 - text.get_width() // 2 - 5, 20 + text.get_height(), text.get_width() + 10, 20))
+                    
+                    font = pygame.font.Font(resource_path('Kenney Pixel.ttf'), 100)
+
+                    tet = "Cleared " + str(floors_cleared) + " floors"
+
+                    text = font.render(tet, True, (255, 255, 255))
+                    game_window.blit(text, (WINDOW_WIDTH // 2- text.get_width() // 2, 200))
 
                 else:
 
@@ -1199,7 +1206,7 @@ console_data = {"Message": "",
                 "FPS": False}
     
 PLAT_VER = "WIN"
-DEV_VER = "DEV"
+DEV_VER = "1.0"
 FRAMERATE = 60
 
 if DEV_VER == "DEV":
