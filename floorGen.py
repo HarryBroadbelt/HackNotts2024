@@ -82,9 +82,9 @@ class Floor:
         aStarPassed = False
             
         while not exitFound or not playerPlaced or not monsterPlaced or not aStarPassed:
-            MAX_SIZE = 15
-            MAX_TUNNELS = 100
-            MAX_LENGTH = 10
+            MAX_SIZE = 20
+            MAX_TUNNELS = 60
+            MAX_LENGTH = 8
             self.exit = [1, 0]
             self.playerSpawn = [0,1]
             self.monsterSpawn = [0,0]
@@ -175,7 +175,7 @@ class Floor:
             for i in range(1,randI):
                 for u in range(1,randU):
                     if not exitFound:
-                        if self.grid[i][u] == " ":
+                        if self.grid[i][u] == "#":
                             surroundingWalls = 0
                             for offset in range(-1,2):
                                 if self.grid[i+offset][u] == "#":
