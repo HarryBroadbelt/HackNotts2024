@@ -452,6 +452,10 @@ def main():
                     new_display = True
                     new_floor = False
                     cur_floor = Floor()
+                    for i in range(30):
+                        print(cur_floor.grid[i])
+                    print(cur_floor.playerSpawn)
+                    print(cur_floor.exit)
                     loc = [1, 1]
                     player = Player(loc)
                     en_typ = random.choice(en_types)

@@ -13,13 +13,25 @@ def isDest(row,col,floor):
     return row == floor.exit[0] and col == floor.exit[1]
 
 def calcHeuristic(row, col, floor):
-    return((row-floor.exit[0])**2+(col-floor.exit)**2)
+    return((row-floor.exit[0])**2+(col-floor.exit[1])**2)
 
 def isValid(row,col):
     return (row>=0) and (row<30) and (col>=0) and (col<30)
 
 def unblocked(grid,row,col):
-    grid[row][col] == " "
+    return grid[row][col] == " "
+
+def tracePath(nodeDetails, floor):
+    path = []
+    row = floor.exit[0]
+    col = floor.exit[1]
+    while not(nodeDetails[row][col].parent == (row,col)):
+        path.append((row,col))
+        tNode = nodeDetails[row][col].parent
+        row = tNode[0]
+        col = tNode[1]
+        path.append((row,col))
+        path.reverse()
 
 def aStarAlgo(start,end,floor):
     closedList = [[False for _ in range(30)] for _ in range(30)]
@@ -43,6 +55,7 @@ def aStarAlgo(start,end,floor):
             if isValid(newI,newJ) and unblocked(floor.grid,newI,newJ) and not closedList[newI][newJ]:
                 if isDest(newI, newJ, floor):
                     nodeDetails[newI][newJ].parent=(i,j)
+                    tracePath(nodeDetails, floor)
                     foundDest=True #found path
                     return True
                 else:
