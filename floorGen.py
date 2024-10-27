@@ -175,7 +175,7 @@ class Floor:
             for i in range(1,randI):
                 for u in range(1,randU):
                     if not exitFound:
-                        if self.grid[i][u] == " ":
+                        if self.grid[i][u] == "#":
                             surroundingWalls = 0
                             for offset in range(-1,2):
                                 if self.grid[i+offset][u] == "#":
