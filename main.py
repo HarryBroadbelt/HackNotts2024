@@ -428,7 +428,7 @@ def main():
 
             dis_type = "REAL"
 
-            sound_channel = pygame.mixer.Channel(4144)
+            sound_channel = pygame.mixer.Channel(1)
 
             while game_over == False:
 
@@ -553,12 +553,16 @@ def main():
                             
                             new_display = True
 
-                            print(en_sounds[enemy.type]["Move"])
+                            sound_dir = findSoundDirection(player.loc, player.dir, copy.deepcopy(en_loc))
+                            sound_muffle = checkWalls(cur_floor.grid, copy.deepcopy(en_loc), player.loc)
+                            sound_dist = math.dist(copy.deepcopy(en_loc), player.loc)
+                            print(sound_dir, sound_muffle, sound_dist)
+                            l_v, r_v = soundVolume(sound_dist, sound_dir, sound_muffle)
 
-                            sound_dir = findSoundDirection(player.loc, player.dir, en_loc)
-                            sound_muffle = checkWalls(cur_floor.grid, en_loc, player.loc)
-                            sound_dist = distFinder(en_loc, player.loc)
-                            en_sounds[enemy.type]["Move"].set_volume(soundVolume(sound_dist, sound_dir, sound_muffle))
+                            print(l_v, r_v)
+
+                            sound_channel.play(en_sounds[enemy.type]["Move"])
+                            sound_channel.set_volume(l_v, r_v)
                             
 
                     if enemy.x == player.loc[0] and enemy.y == player.loc[1]: # player caught
