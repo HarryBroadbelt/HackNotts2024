@@ -103,7 +103,7 @@ class Floor:
 
             for i in range(MAX_TUNNELS):
                 tunnel_dir = random.choice([[0, 1], [1, 0], [0, -1], [-1, 0]])
-                self.grid[tunnel[0]][tunnel[1]] = " "
+                self.grid[tunnel[0]][tunnel[1]] = "#"
                 tunnel = [tunnel[0] + tunnel_dir[0], tunnel[1] + tunnel_dir[1]]
                 if tunnel[0] == 0:
                     tunnel[0] = 1
