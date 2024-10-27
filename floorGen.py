@@ -168,7 +168,7 @@ class Floor:
                             pass
                     if exitFound and self.grid[i][u] == " " and not playerPlaced:
                         if maths.sqrt((i-self.exit[0])**2+(u-self.exit[1])**2) >= 12:
-                            self.playerSpawn = (i,u)
+                            self.playerSpawn = [i,u]
                             playerPlaced = True
 
                 
@@ -208,7 +208,7 @@ class Floor:
                             pass
                     if exitFound and self.grid[i][u] == " " and not playerPlaced:
                         if maths.sqrt((i-self.exit[0])**2+(u-self.exit[1])**2) >= 12:
-                            self.playerSpawn = (i,u)
+                            self.playerSpawn = [i,u]
                             playerPlaced = True
             crazyList = []
             for i in range(1,MAX_SIZE):
