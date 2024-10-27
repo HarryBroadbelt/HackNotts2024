@@ -133,7 +133,32 @@ class Enemy():
                     self.x = self.x
                     self.y = self.y - 1
                     break
-                break
+                elif(self.type=='Stalker' and rng == 6):
+                    rand_x = random.randint(1,4)
+                    rand_y = random.randomt(1,4)
+                    rand_dir_x = random.randint(1,2)
+                    rand_dir_y = random.randint(1,2)
+                    if(rand_dir_x == 1 and rand_dir_y == 1):
+                        if(not(self.x + rand_x > len(grid) and self.y + rand_dir_y > len(grid))):
+                            self.x = self.x + rand_x
+                            self.y = self.y + rand_y
+                            break
+                    elif(rand_dir_x == 1 and rand_dir_y == 2):
+                        if(not(self.x + rand_x > len(grid) and self.y - rand_dir_y < 0)):
+                            self.x = self.x + rand_x
+                            self.y = self.y - rand_y
+                            break
+                    elif(rand_dir_x == 2 and rand_dir_y == 1):
+                        if(not(self.x - rand_x < 0 and self.y + rand_dir_y > len(grid))):
+                            self.x = self.x - rand_x
+                            self.y = self.y + rand_y
+                            break
+                    elif(rand_dir_x == 2 and rand_dir_y == 2):
+                        if(not(self.x + rand_x < 0 and self.y - rand_dir_y < 0)):
+                            self.x = self.x - rand_x
+                            self.y = self.y - rand_y
+                            break
+                
             enemy_position = [self.x, self.y]
             
 
