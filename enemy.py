@@ -7,6 +7,7 @@ ENEMY TYPES:
 - Stalker: Teleports randomly nearby the player. If the player sees them they must look away within x seconds or it starts to chase.
 - Meaty Michael: Stops moving if it sees the player
 - Phased: Moves randomly but can move through walls at a greatly reduced rate
+- 
 
 """
 
@@ -24,6 +25,7 @@ class Enemy():
             max_aggro = 3
         elif(type=='Phased'):
             max_aggro = 6
+        
         self.velocity=velocity
         self.x=x
         self.y=y
@@ -34,6 +36,7 @@ class Enemy():
 
 
     def noticed_player(self, grid, player_location, player_direction):
+        print('a')
         self.noticed = False
         same_row = False
         wall_present=False
@@ -58,12 +61,13 @@ class Enemy():
                     if(grid[self.x][i]=='#'):
                         wall_present=True
     
+        print('b')
         if(wall_present or same_row == False):
             self.current_aggro = self.current_aggro - 1
             if(self.current_aggro < self.attributes['min_aggro']):
                 self.current_aggro = self.attributes['min_aggro']
             return False
-        
+        print('c')
         self.noticed=True
         if(self.type=='Chaser'):
             self.current_aggro=self.current_aggro+3
@@ -85,6 +89,7 @@ class Enemy():
 
     def ai_process(self, grid, player_location):
         enemy_position = [self.x, self.y]
+        print('aaaa')
         if(self.type == 'Phased'):
             rng = random.randint(1,12)
             while(1):
@@ -106,9 +111,6 @@ class Enemy():
                     break
                 break
             enemy_position = [self.x, self.y]
-        elif(self.type == 'Stalker'):
-            #enemy_position=self.move_towards_player(grid,1,player_location)
-            print('needs fixing.')
         elif(self.noticed):
             if(self.type != 'Meaty Michael'):
                 enemy_position=self.move_towards_player(grid,1,player_location)
@@ -116,6 +118,7 @@ class Enemy():
                 enemy_position = [self.x, self.y]
         else:
             rng = random.randint(1,12)
+            print(rng)
             while(1):
                 if(rng == 1 and grid[self.x+1][self.y] != '#'):
                     self.x = self.x + 1
@@ -133,6 +136,28 @@ class Enemy():
                     self.x = self.x
                     self.y = self.y - 1
                     break
+                elif(self.type=='Stalker' and rng == 6):
+                    rand_x = random.randint(1,4)
+                    rand_y = random.randomt(1,4)
+                    rand_dir_x = random.randint(1,2)
+                    rand_dir_y = random.randint(1,2)
+                    if(rand_dir_x == 1 and rand_dir_y == 1):
+                        if(not(self.x + rand_x > len(grid) and self.y + rand_dir_y > len(grid))):
+                            self.x = self.x + rand_x
+                            self.y = self.y + rand_y
+                    elif(rand_dir_x == 1 and rand_dir_y == 2):
+                        if(not(self.x + rand_x > len(grid) and self.y - rand_dir_y < 0)):
+                            self.x = self.x + rand_x
+                            self.y = self.y - rand_y
+                    elif(rand_dir_x == 2 and rand_dir_y == 1):
+                        if(not(self.x - rand_x < 0 and self.y + rand_dir_y > len(grid))):
+                            self.x = self.x - rand_x
+                            self.y = self.y + rand_y
+                    elif(rand_dir_x == 2 and rand_dir_y == 2):
+                        if(not(self.x + rand_x < 0 and self.y - rand_dir_y < 0)):
+                            self.x = self.x - rand_x
+                            self.y = self.y - rand_y
+                    
                 break
             enemy_position = [self.x, self.y]
             

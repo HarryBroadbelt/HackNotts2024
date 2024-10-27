@@ -1,7 +1,7 @@
 #1234567890123456789012345678901234567890123456789012345678901234567890123456789
 import random, copy, pygame, sys, os, math, time, asyncio
 from enemy import Enemy
-from imageBlur import blurScreen
+from imageBlur import blurScreen, gaussian
 from sounds import findSoundDirection, checkWalls, soundVolume, distFinder, Direction
 from floorGen import Floor
 
