@@ -3,7 +3,8 @@ import random
 """
 ENEMY TYPES:
 - Chaser: Acts normal but speeds up when it sees the player
-- Stalker:
+  - Could have a brief wind-up when he sees the player? eg a pause to scream before rapid acceleration to max speed. -M
+- Stalker: me fr
 - Meaty Michael: Stops moving if it sees the player
 - Phased: Moves randomly but can move through walls at a greatly reduced rate
 
