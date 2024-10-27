@@ -32,6 +32,7 @@ def tracePath(nodeDetails, floor):
         col = tNode[1]
         path.append((row,col))
         path.reverse()
+    print(path)
 
 def aStarAlgo(start,end,floor):
     closedList = [[False for _ in range(30)] for _ in range(30)]
@@ -55,7 +56,8 @@ def aStarAlgo(start,end,floor):
             if isValid(newI,newJ) and unblocked(floor.grid,newI,newJ) and not closedList[newI][newJ]:
                 if isDest(newI, newJ, floor):
                     nodeDetails[newI][newJ].parent=(i,j)
-                    tracePath(nodeDetails, floor)
+                    #print("found path")
+                    #tracePath(nodeDetails, floor)
                     foundDest=True #found path
                     return True
                 else:
@@ -68,6 +70,7 @@ def aStarAlgo(start,end,floor):
                         nodeDetails[newI][newJ].g=gNew
                         nodeDetails[newI][newJ].h=hNew
                         nodeDetails[newI][newJ].parent=(i,j)
+    return False
     
 class Floor:
 
@@ -84,7 +87,7 @@ class Floor:
         if LV_GEN == "rand":
             
             
-            while not exitFound and not playerPlaced and not monsterPlaced and not aStarPassed:
+            while not exitFound or not playerPlaced or not monsterPlaced or not aStarPassed:
                 MAX_SIZE = 30
                 MAX_TUNNELS = 50
                 MAX_LENGTH = 15
@@ -219,8 +222,10 @@ class Floor:
                         if self.grid[i][u] == " " and (i,u) != self.exit and (i,u) != self.playerSpawn and maths.sqrt((i-self.playerSpawn[0])**2+(u-self.playerSpawn[1])**2) >= 12:
                             crazyList.append((i,u))
                 self.monsterSpawn = random.choice(crazyList)
-                monsterSpawned = True
-                aStarPassed = aStarAlgo(self.playerSpawn,self.exit,self) and aStarAlgo(self.monsterSpawn,self.exit,self)
+                monsterPlaced = True
+                playerExit = aStarAlgo(self.playerSpawn,self.exit,self)
+                monsterExit = aStarAlgo(self.monsterSpawn,self.exit,self)
+                aStarPassed = playerExit and monsterExit
                         
                             
         
