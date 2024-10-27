@@ -1,7 +1,7 @@
 #1234567890123456789012345678901234567890123456789012345678901234567890123456789
 import random, copy, pygame, sys, os, math, time, asyncio
 from enemy import Enemy
-from imageBlur import blurScreen, gaussian
+from imageBlur import blurScreen
 from sounds import findSoundDirection, checkWalls, soundVolume, distFinder, Direction
 from floorGen import Floor
 
@@ -1184,8 +1184,8 @@ en_sounds = {"Meaty Michael": {"Move": pygame.mixer.Sound("En1M.wav"),
              "Chaser": {"Move": pygame.mixer.Sound("En2M.ogg"),
                         "Spot": pygame.mixer.Sound("En2S.ogg")},
              "Phased": {"Move": pygame.mixer.Sound("En3M.wav"),
-                        "Spot": pygame.mixer.Sound("En3S.ogg")}},
+                        "Spot": pygame.mixer.Sound("En3S.ogg")},
              "Stalker": {"Move": pygame.mixer.Sound("En4M.wav"),
-                        "Spot": pygame.mixer.Sound("En4S.ogg")}
+                        "Spot": pygame.mixer.Sound("En4S.ogg")}}
             
 main()
