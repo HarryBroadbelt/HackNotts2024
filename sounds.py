@@ -19,10 +19,10 @@ def soundVolume(distance: float, primaryDir: Direction, muffling: int) -> (int,i
     if primaryDir.value == "L":
         print(f"l dist+muff = {distance+muffling}")
         voL = 1/max((distance+muffling),1)
-        voR = .5/max((distance+muffling),1)
+        voR = .3/max((distance+muffling),1)
     elif primaryDir.value == "R":
         print(f"r dist+muff = {distance+muffling}")
-        voL = .5/max((distance+muffling),1)
+        voL = .3/max((distance+muffling),1)
         voR = 1/max((distance+muffling),1)
     else:
         print(f"f/b dist+muff = {distance+muffling}")
@@ -60,6 +60,8 @@ def checkWalls(grid,soundLoc,playerLoc):
 def findSoundDirection(playerLoc: (int,int), playerDirection: Direction, soundLoc: (int, int)) -> Direction:
     xDif = soundLoc[0] - playerLoc[0]
     yDif = soundLoc[1] - playerLoc[1]
+
+    print(playerDirection)
 
     if playerDirection == Direction.FORWARD:
         if xDif < 0:

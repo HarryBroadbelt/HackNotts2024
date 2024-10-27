@@ -623,9 +623,12 @@ def main(game_window):
                             enemy.y = en_loc[1]
 
                             sound_dir = findSoundDirection(player.loc, player.dir, copy.deepcopy(en_loc))
+                            print(sound_dir)
                             sound_muffle = checkWalls(cur_floor.grid, copy.deepcopy(en_loc), player.loc)
                             sound_dist = math.dist(copy.deepcopy(en_loc), player.loc)
                             l_v, r_v = soundVolume(sound_dist, sound_dir, sound_muffle)
+
+                            print(l_v, r_v)
 
                             sound_channel.play(en_sounds[enemy.type]["Move"])
                             sound_channel.set_volume(l_v, r_v)
