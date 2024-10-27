@@ -2,6 +2,7 @@
 import random, copy, pygame, sys, os, math, time, asyncio
 from enemy import Enemy
 from imageBlur import blurScreen
+from sounds import findSoundDirection, checkWalls, soundVolume, distFinder, Direction
 
 ### TEMPLATE FUNCTIONS
 
@@ -427,6 +428,8 @@ def main():
 
             dis_type = "REAL"
 
+            sound_channel = pygame.mixer.Channel(4144)
+
             while game_over == False:
 
                 clock.tick(FRAMERATE)
@@ -550,6 +553,14 @@ def main():
                             
                             new_display = True
 
+                            print(en_sounds[enemy.type]["Move"])
+
+                            sound_dir = findSoundDirection(player.loc, player.dir, en_loc)
+                            sound_muffle = checkWalls(cur_floor.grid, en_loc, player.loc)
+                            sound_dist = distFinder(en_loc, player.loc)
+                            en_sounds[enemy.type]["Move"].set_volume(soundVolume(sound_dist, sound_dir, sound_muffle))
+                            
+
                     if enemy.x == player.loc[0] and enemy.y == player.loc[1]: # player caught
                         game_over = True
 
@@ -652,18 +663,15 @@ def real_display(player, cur_floor, enemy, floor_num = 0):
             game_window.blit(the_art, (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 80))
             
         else:
+            """
             the_art = arts["TD1"].copy()
             the_art = pygame.transform.scale(the_art, (160, 160))
             game_window.blit(the_art, (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 80))
             the_art = arts["TC1"].copy()
             the_art = pygame.transform.scale(the_art, (160, 160))
-            game_window.blit(the_art, (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 80))
-            
-            if enemy.x == n_loc[0] and enemy.y == n_loc[1]:
-                the_art = enemy.art
-                the_art = pygame.transform.scale(the_art, (160, 160))
-                game_window.blit(the_art, (WINDOW_WIDTH // 2 + 80*5, WINDOW_HEIGHT // 2 - 80))
-                game_window.blit(the_art, (WINDOW_WIDTH // 2 + 80*3, WINDOW_HEIGHT // 2 - 80))
+            game_window.blit(the_art, (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 80))"""
+            pass
+        
     except:
         pass
 
@@ -692,6 +700,7 @@ def real_display(player, cur_floor, enemy, floor_num = 0):
             the_art = arts["TC1"].copy()
             the_art = pygame.transform.scale(the_art, (160, 160))
             game_window.blit(the_art, (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 80))
+                
     except:
         pass
 
@@ -711,12 +720,6 @@ def real_display(player, cur_floor, enemy, floor_num = 0):
                 the_art = arts["TL1"].copy()
             the_art = pygame.transform.scale(the_art, (160, 160))
             game_window.blit(the_art, (WINDOW_WIDTH // 2 - 80*2, WINDOW_HEIGHT // 2 - 80))
-        else:
-            
-            if enemy.x == n_loc[0] and enemy.y == n_loc[1]:
-                the_art = enemy.art
-                the_art = pygame.transform.scale(the_art, (160, 160))
-                game_window.blit(the_art, (WINDOW_WIDTH // 2 - 160 - 80*5, WINDOW_HEIGHT // 2 - 80))
     except:
         pass
 
@@ -1119,6 +1122,11 @@ en_art = {"Meaty Michael": pygame.image.load("En1.png"),
           "Chaser": pygame.image.load("En2.png"),
           "Phased": pygame.image.load("En3.png")}
 
-en_sounds = {"Meaty Michael": "Move": pass}
+en_sounds = {"Meaty Michael": {"Move": pygame.mixer.Sound("En1M.wav"),
+                               "Spot": pygame.mixer.Sound("En1S.ogg")},
+             "Chaser": {"Move": pygame.mixer.Sound("En2M.ogg"),
+                        "Spot": pygame.mixer.Sound("En2S.ogg")},
+             "Phased": {"Move": pygame.mixer.Sound("En3M.wav"),
+                        "Spot": pygame.mixer.Sound("En3S.ogg")}}
             
 main()

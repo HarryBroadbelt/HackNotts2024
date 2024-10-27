@@ -10,16 +10,16 @@ class Direction(Enum):
     FORWARD = "U"
     BACKWARD = "D"
 
-def distFinder(soundLoc: (int,int), playerLoc: (int,int)) -> int:
+def distFinder(soundLoc: (int,int), playerLoc: (int,int)) -> float:
     dist = maths.sqrt((soundLoc[0]-playerLoc[0])**2 + (soundLoc[1]-playerLoc[1])**2)
     return dist
 
 def soundVolume(distance: float, primaryDir: Direction, muffling: int) -> (int,int):
     """Use this with "set_volume()"."""
-    if primaryDir.value == 1:
+    if primaryDir.value == "L":
         voL = 2/(distance+muffling)
         voR = 1/(distance+muffling)
-    elif primaryDir.value == 2:
+    elif primaryDir.value == "R":
         voL = 1/(distance+muffling)
         voR = 2/(distance+muffling)
     else:
@@ -50,6 +50,7 @@ def checkWalls(grid,soundLoc,playerLoc):
                 soundLoc[1]-=1
         else:
             atPlayer = True
+    return muffling
         
         
 
