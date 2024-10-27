@@ -552,13 +552,15 @@ def main():
 
                     if en_mov_timer == 0:
 
-                        en_mov_timer = FRAMERATE
-
                         enemy.noticed_player(cur_floor.grid, player.loc, player.dir)
                         
                         ox = enemy.x
                         oy = enemy.y
                         en_loc = enemy.ai_process(cur_floor.grid, player.loc)
+
+                        en_mov_timer = FRAMERATE
+                        if enemy.current_aggro >= 6:
+                            en_mov_timer = FRAMERATE // 2
 
                         if enemy.noticed == True and already_spotted == False:
                             print("yeah")
