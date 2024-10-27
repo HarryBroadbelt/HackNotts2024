@@ -138,7 +138,7 @@ class Enemy():
                     break
                 elif(self.type=='Stalker' and rng == 6):
                     rand_x = random.randint(1,4)
-                    rand_y = random.randomt(1,4)
+                    rand_y = random.randint(1,4)
                     rand_dir_x = random.randint(1,2)
                     rand_dir_y = random.randint(1,2)
                     if(rand_dir_x == 1 and rand_dir_y == 1):
