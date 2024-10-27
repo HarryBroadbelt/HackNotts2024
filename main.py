@@ -468,7 +468,7 @@ def main(game_window):
                             valid_floor = True
                             player = Player(cur_floor.playerSpawn)
                             en_typ = random.choice(en_types)
-                            en_typ = "Spectre"
+                            #en_typ = "Spectre"
                             enemy = Enemy(velocity = 0, x = cur_floor.monsterSpawn[0], y = cur_floor.monsterSpawn[1], type = en_typ, art = en_art[en_typ])
                             already_spotted = False
 
