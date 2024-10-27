@@ -452,14 +452,9 @@ def main():
                     new_display = True
                     new_floor = False
                     cur_floor = Floor()
-                    for i in range(30):
-                        print(cur_floor.grid[i])
-                    print(cur_floor.playerSpawn)
-                    print(cur_floor.exit)
-                    loc = [1, 1]
-                    player = Player(loc)
+                    player = Player(cur_floor.playerSpawn)
                     en_typ = random.choice(en_types)
-                    enemy = Enemy(velocity = 0, x = 9, y = 9, type = en_typ, art = en_art[en_typ])
+                    enemy = Enemy(velocity = 0, x = cur_floor.monsterSpawn[0], y = cur_floor.monsterSpawn[1], type = en_typ, art = en_art[en_typ])
 
                     print(player.loc)
 
