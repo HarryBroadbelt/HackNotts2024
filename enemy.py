@@ -15,7 +15,7 @@ class Enemy():
     def __init__(self, velocity, x, y, type, art):
         self.art = art
         print('shimmy yeah shimmy yeah shimmy yah')
-        #type = 'Stalker'
+        type = 'Stalker'
         if(type == 'Chaser'):
             max_aggro = 10
         elif(type == 'Stalker'):
@@ -65,7 +65,6 @@ class Enemy():
             return False
         
         self.noticed=True
-        print
         if(self.type=='Chaser'):
             self.current_aggro=self.current_aggro+3
             if(self.current_aggro>self.attributes['max_aggro']):
@@ -87,7 +86,7 @@ class Enemy():
     def ai_process(self, grid, player_location):
         enemy_position = [self.x, self.y]
         if(self.type == 'Phased'):
-            rng = random.randint(1,12)
+            rng = random.randint(1,8)
             while(1):
                 if(rng == 1 and self.x+1 < len(grid)):
                     self.x = self.x + 1
@@ -116,7 +115,7 @@ class Enemy():
             else:
                 enemy_position = [self.x, self.y]
         else:
-            rng = random.randint(1,12)
+            rng = random.randint(1,8)
             while(1):
                 if(rng == 1 and grid[self.x+1][self.y] != '#'):
                     self.x = self.x + 1

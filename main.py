@@ -1,7 +1,7 @@
 #1234567890123456789012345678901234567890123456789012345678901234567890123456789
 import random, copy, pygame, sys, os, math, time, asyncio
 from enemy import Enemy
-from imageBlur import blurScreen
+from imageBlur import blurScreen, gaussian
 from sounds import findSoundDirection, checkWalls, soundVolume, distFinder, Direction
 from floorGen import Floor
 
@@ -239,6 +239,7 @@ class Player:
             self.loc = copy.deepcopy(cur_loc)
         else:
             self.audioChannel.play(self.footstepSound)
+            self.audioChannel.set_volume(0.7)
 """
 class Floor:
 
@@ -435,6 +436,7 @@ def main():
             dis_type = "REAL"
 
             sound_channel = pygame.mixer.Channel(1)
+            spot_channel = pygame.mixer.Channel(2)
 
             while game_over == False:
 
@@ -454,7 +456,9 @@ def main():
                     cur_floor = Floor()
                     player = Player(cur_floor.playerSpawn)
                     en_typ = random.choice(en_types)
+                    #en_typ = "Chaser"
                     enemy = Enemy(velocity = 0, x = cur_floor.monsterSpawn[0], y = cur_floor.monsterSpawn[1], type = en_typ, art = en_art[en_typ])
+                    already_spotted = False
 
                     print(player.loc)
 
@@ -532,8 +536,10 @@ def main():
 
                 if mov_dir != None and mov_timer == 0:
                     mov_timer = int(FRAMERATE / 6)
+                    old_loc = copy.deepcopy(player.loc)
                     player.move(mov_dir, cur_floor.grid, cur_floor.exit)
-                    new_display = True
+                    if old_loc != player.loc:
+                        new_display = True
 
                 if player.new_floor == True:
                     player.new_floor = False
@@ -549,9 +555,26 @@ def main():
                         en_mov_timer = FRAMERATE
 
                         enemy.noticed_player(cur_floor.grid, player.loc, player.dir)
+                        
                         ox = enemy.x
                         oy = enemy.y
                         en_loc = enemy.ai_process(cur_floor.grid, player.loc)
+
+                        if enemy.noticed == True and already_spotted == False:
+                            print("yeah")
+                            already_spotted = True
+
+                            sound_dir = findSoundDirection(player.loc, player.dir, copy.deepcopy(en_loc))
+                            sound_muffle = checkWalls(cur_floor.grid, copy.deepcopy(en_loc), player.loc)
+                            sound_dist = math.dist(copy.deepcopy(en_loc), player.loc)
+                            l_v, r_v = soundVolume(sound_dist, sound_dir, sound_muffle)
+
+                            spot_channel.play(en_sounds[enemy.type]["Spot"])
+                            spot_channel.set_volume(l_v, r_v)
+                            
+                        elif enemy.noticed == False and enemy.current_aggro == enemy.attributes["min_aggro"]:
+                            already_spotted = False
+                            
                         if ox != en_loc[0] or oy != en_loc[1]:
                             enemy.x = en_loc[0]
                             enemy.y = en_loc[1]
@@ -625,26 +648,26 @@ def temp_display(player, cur_floor, enemy):
     for x in range(0, len(cur_floor.grid)):
         for y in range(0, len(cur_floor.grid)):
             if cur_floor.grid[x][y] == "#":
-                pygame.draw.rect(game_window, (0, 0, 0), (x*40, y*40, 40, 40))
+                pygame.draw.rect(game_window, (0, 0, 0), (x*30, y*30, 40, 40))
             elif cur_floor.grid[x][y] == " ":
-                pygame.draw.rect(game_window, (255, 255, 255), (x*40, y*40, 40, 40))
+                pygame.draw.rect(game_window, (255, 255, 255), (x*30, y*30, 40, 40))
 
     print(cur_floor.exit, player.loc)
 
-    pygame.draw.rect(game_window, (255, 255, 255), (cur_floor.exit[0]*40 + 10, cur_floor.exit[1]*40 + 10, 20, 20))
+    pygame.draw.rect(game_window, (255, 255, 255), (cur_floor.exit[0]*30 + 5, cur_floor.exit[1]*30 + 5, 20, 20))
 
-    pygame.draw.rect(game_window, (0, 255, 0), (player.loc[0]*40 + 10, player.loc[1]*40 + 10, 20, 20))
+    pygame.draw.rect(game_window, (0, 255, 0), (player.loc[0]*30 + 5, player.loc[1]*30 + 5, 20, 20))
     
-    pygame.draw.rect(game_window, (255, 0, 0), (enemy.x*40 + 10, enemy.y*40 + 10, 20, 20))
+    pygame.draw.rect(game_window, (255, 0, 0), (enemy.x*30 + 5, enemy.y*30 + 5, 20, 20))
 
     if player.dir == "U":
-        pygame.draw.rect(game_window, (0, 0, 0), (player.loc[0] * 40 + 10 + 5, player.loc[1]*40, 10, 20))
+        pygame.draw.rect(game_window, (0, 0, 0), (player.loc[0] * 30 + 5 + 5, player.loc[1]*30, 10, 20))
     if player.dir == "D":
-        pygame.draw.rect(game_window, (0, 0, 0), (player.loc[0] * 40 + 10 + 5, player.loc[1]*40 + 20, 10, 20))
+        pygame.draw.rect(game_window, (0, 0, 0), (player.loc[0] * 30 + 5 + 5, player.loc[1]*30 + 10, 10, 20))
     if player.dir == "L":
-        pygame.draw.rect(game_window, (0, 0, 0), (player.loc[0] * 40, player.loc[1]*40 + 10 + 5, 20, 10))
+        pygame.draw.rect(game_window, (0, 0, 0), (player.loc[0] * 30, player.loc[1]*30 + 5 + 5, 20, 10))
     if player.dir == "R":
-        pygame.draw.rect(game_window, (0, 0, 0), (player.loc[0] * 40 + 10 + 10, player.loc[1]*40 + 10 + 5, 20, 10))
+        pygame.draw.rect(game_window, (0, 0, 0), (player.loc[0] * 30 + 5 + 5, player.loc[1]*30 + 5 + 5, 20, 10))
 
 def real_display(player, cur_floor, enemy, floor_num = 0):
     #print(random.randint(0, 100))
@@ -1153,13 +1176,16 @@ en_types = ["Meaty Michael", "Chaser", "Phased"]
 
 en_art = {"Meaty Michael": pygame.image.load("En1.png"),
           "Chaser": pygame.image.load("En2.png"),
-          "Phased": pygame.image.load("En3.png")}
+          "Phased": pygame.image.load("En3.png"),
+          "Stalker": pygame.image.load("En4.png")}
 
 en_sounds = {"Meaty Michael": {"Move": pygame.mixer.Sound("En1M.wav"),
                                "Spot": pygame.mixer.Sound("En1S.ogg")},
              "Chaser": {"Move": pygame.mixer.Sound("En2M.ogg"),
                         "Spot": pygame.mixer.Sound("En2S.ogg")},
              "Phased": {"Move": pygame.mixer.Sound("En3M.wav"),
-                        "Spot": pygame.mixer.Sound("En3S.ogg")}}
+                        "Spot": pygame.mixer.Sound("En3S.ogg")},
+             "Stalker": {"Move": pygame.mixer.Sound("En4M.wav"),
+                        "Spot": pygame.mixer.Sound("En4S.ogg")}}
             
 main()
