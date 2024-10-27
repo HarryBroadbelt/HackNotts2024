@@ -413,16 +413,33 @@ def main(game_window):
 
             clock.tick(FRAMERATE)
 
-            game_window.fill((255, 255, 255))
+            game_window.fill((133,133,133))
             
-            font = pygame.font.Font(resource_path('Kenney Pixel.ttf'), 120)
+            font = pygame.font.Font(resource_path('Kenney Pixel.ttf'), 150)
 
-            text = font.render("TUTORIAL", True, (0, 0, 0))
+            text = font.render("TUTORIAL", True, (224,224,224))
             game_window.blit(text, (WINDOW_WIDTH // 2- text.get_width() // 2, 20))
 
-            pygame.draw.rect(game_window, (0, 0, 0), (WINDOW_WIDTH // 2 - text.get_width() // 2 - 5, 20 + text.get_height(), text.get_width() + 10, 20))
+            pygame.draw.rect(game_window, (224,224,224), (WINDOW_WIDTH // 2 - text.get_width() // 2 - 5, 20 + text.get_height(), text.get_width() + 10, 20))
 
-            game_window.blit(qr_code, (WINDOW_WIDTH // 2 - qr_code.get_width() // 2, 60 + text.get_height()))
+            game_window.blit(qr_code, (WINDOW_WIDTH // 4 * 3 - qr_code.get_width() // 2, 425 - qr_code.get_height() // 2))
+            
+            font = pygame.font.Font(resource_path('Kenney Pixel.ttf'), 70)
+
+            text = font.render("W - Move Forwards", True, (224,224,224))
+            game_window.blit(text, (WINDOW_WIDTH // 4- text.get_width() // 2, 250))
+            text = font.render("S - Move Backwards", True, (224,224,224))
+            game_window.blit(text, (WINDOW_WIDTH // 4- text.get_width() // 2, 300))
+            text = font.render("A - Strafe Left", True, (224,224,224))
+            game_window.blit(text, (WINDOW_WIDTH // 4- text.get_width() // 2, 350))
+            text = font.render("D - Strafe Right", True, (224,224,224))
+            game_window.blit(text, (WINDOW_WIDTH // 4- text.get_width() // 2, 400))
+            text = font.render("Q - Turn Left", True, (224,224,224))
+            game_window.blit(text, (WINDOW_WIDTH // 4- text.get_width() // 2, 450))
+            text = font.render("E - Turn Right", True, (224,224,224))
+            game_window.blit(text, (WINDOW_WIDTH // 4- text.get_width() // 2, 500))
+            text = font.render("Find The Door", True, (224,224,224))
+            game_window.blit(text, (WINDOW_WIDTH // 4- text.get_width() // 2, 600))
      
             window_resize()
 
